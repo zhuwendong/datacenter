@@ -1,0 +1,199 @@
+.title-box{
+    box-sizing:border-box;
+    padding:0px 10px;
+    width:100%;
+    height:46px;
+    line-height: 46px;
+    background-color:#fafafa;
+    margin-top:20px;
+    color:#333;
+    font-weight: 600;
+    font-size:16px;
+}
+.title-box .icon-student{
+    display: inline-block;
+    width:18px;
+    height:18px;
+    background-image: url(../imgs/students.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+    top:2px;
+}
+.row{
+    margin: 0;
+}
+.moreFunctions{
+    text-align: center;
+}
+.moreFunctions P{
+    line-height: 28px;
+    font-size: 16px;
+    color: #676767;
+}
+.line{
+    height: 10px;
+    background: #fafafa;
+    margin-top: 20px;
+    border-top:0;
+}
+.filter .btn{
+    padding: 6px 12px;
+}
+.table-content .table>tbody>tr:nth-of-type(1)>td, .table-content .table>tbody>tr:nth-of-type(2)>td{
+    border-top: 0;
+}
+.btn-primary{
+    background-color: #2754b1;
+    border-color: #2754b1;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+    background-color: #2754b1;
+    border-color: #2754b1;
+}
+/*=====================*/
+.checkBox {
+    position: relative;
+    display: block;
+    line-height: 0;
+}
+.checkBox:after, .checkBox:before {
+    font-family: FontAwesome;
+    -webkit-font-feature-settings: normal;
+    -moz-font-feature-settings: normal;
+    font-feature-settings: normal;
+    -webkit-font-kerning: auto;
+    -moz-font-kerning: auto;
+    font-kerning: auto;
+    -webkit-font-language-override: normal;
+    -moz-font-language-override: normal;
+    font-language-override: normal;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: normal;
+    text-rendering: auto;
+}
+.checkBox label {
+    width: 40px;
+    height: 20px;
+    background: #ccc;
+    position: relative;
+    display: inline-flex;
+    border-radius: 20px;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    margin: 0;
+}
+.checkBox label:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+.checkBox input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    opacity: 0;
+    cursor: pointer;
+    margin: 0;
+}
+.checkBox input:hover + label:after {
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.2), 0 3px 8px 0 rgba(0, 0, 0, 0.15);
+}
+.checkBox input:checked + label:after {
+    left: 20px;
+}
+.checkBox input:checked + label {
+    background: #4acc70;
+}
+.filter-items > .filter-title{
+    width: 130px;
+}
+.filter-group{
+    padding: 10px 60px 0 10px;
+}
+.layui-layer-btn .layui-layer-btn0{
+    border-color: #2a52b1 !important;
+    background-color: #2a52b1 !important;
+}
+.layui-layer-btn a{
+    height: 30px!important;
+    line-height: 30px!important;
+    padding: 0 20px!important;
+    background-color: #e6e6e6!important;
+    border-radius: 3px!important;
+}
+.timeBtn{
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    cursor: pointer;
+}
+.selectorBtn{
+    width: 180px;
+    margin: 10px;
+    display: inline-block;
+    float: left;
+}
+.selectorBtn ul{
+    width: 100%;
+    display: block;
+}
+.selectorBtn ul li{
+    margin: 10px 10px 0;
+    width: calc( 50% - 20px);
+    float: left;
+}
+.selectorBtn ul li a{
+    background: #f5f5f5;
+    display: block;
+    line-height: 36px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    color: #5e5e5e;
+}
+.selectorBtn ul li.active a{
+    background: #2a52b1;
+    color: #fff;
+}
+.siteDemoLaydate{
+    display: inline-block;
+    float: left;
+    margin: 10px;
+}
+.layui-laydate, .layui-laydate-hint{
+    border: 0 !important;
+    box-shadow: none !important;
+    background-color: #f5f5f5 !important;
+    border-radius: 6px;
+}
+.layui-laydate-content table thead tr th{
+    color: #2a52b1;
+    font-weight: bold;
+}
+.layui-laydate-header i.laydate-prev-y, .layui-laydate-header i.laydate-next-y{
+    display: none;
+}
+#layui-laydate1 .layui-this, #layui-laydate2 .layui-this{
+    background-color: #2a52b1 !important;
+}
+.layui-input{
+    height: 30px!important;
+    background: url("../imgs/data.png") no-repeat 94%;
+}
+

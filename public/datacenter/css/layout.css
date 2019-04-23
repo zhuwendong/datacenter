@@ -1,0 +1,282 @@
+@charset 'utf-8';
+
+html, body {
+	height: 100%;
+	font-size: 16px;
+}
+
+.container-fluid {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+.nav-header {
+	height: 80px;
+	background: #2a52b1;
+}
+
+.nav-title {
+	color: #ffffff;
+	font-size: 28px;
+	padding: 20px;
+}
+
+.logout {
+	font-size: 22px;
+	color: #ffffff;
+	cursor: pointer;
+	margin: 0;
+}
+
+.logout > li {
+	float: left;
+	line-height: 80px;
+	height: 80px;
+}
+
+.logout > li:first-child {
+	border-right: 2px solid rgba(255, 255, 255, .1);
+}
+
+.logout > li > a {
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 18px;
+}
+
+.logout > li > a + span {
+	font-size: 14px;
+	padding: 10px 20px;
+}
+
+.logout > li > a > img {
+	margin: 0 20px;
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.logout > li > span {
+	padding: 10px 25px;
+}
+
+.left-sidebar {
+	width: 15%;
+	float: left;
+	background: #ddd;
+	height: calc(100% - 80px);
+}
+
+ul {
+	padding: 0;
+	list-style: none;
+}
+
+ul.first-menu > li {
+	line-height: 40px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.first-menu-title {
+	padding: 0 20px;
+}
+
+.first-menu-title > span:last-child {
+	padding: 11px 20px;
+	transition: all .2s;
+}
+
+.first-menu-title > span:last-child.icon-rotate {
+	transform: rotate(90deg);
+}
+
+ul.second-menu > li {
+	text-indent: 40px;
+	white-space: nowrap;
+}
+
+ul.second-menu > li > a {
+	text-decoration: none;
+	color: #000000;
+	display: block;
+}
+
+ul.second-menu > li.menu-focus > a,
+ul.second-menu > li:hover > a {
+	color: #ffffff;
+}
+
+.menu-focus {
+	background: #2a52b1;
+}
+
+ul.second-menu > li:hover {
+	background: #2a52b1;
+}
+
+.content-container {
+	float: left;
+	height: calc(100% - 84px);
+	width: 85%;
+}
+
+.mainIframe {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.nav-bar {
+	padding: 10px 20px;
+}
+
+ul.nav-path {
+	list-style: none;
+	overflow: hidden;
+	margin: 0;
+}
+
+ul.nav-path > li {
+	float: left;
+}
+
+ul.nav-path > li:first-child {
+	margin: 2px 5px 0 0;
+}
+
+.filter {
+	padding: 10px 20px;
+	overflow: hidden;
+}
+
+.filter-items {
+	float: left;
+	margin: 0 10px;
+}
+
+.filter > button {
+	margin: 0 10px;
+}
+
+.filter-group {
+	float: left;
+	width: 50%;
+	padding: 10px 100px;
+}
+
+.filter-items > .filter-title,
+.filter-items > .filter-content {
+	float: left;
+}
+
+.filter-items > .filter-title {
+	width: 100px;
+	padding: 5px;
+	text-align: right;
+}
+
+select.form-control {
+	width: 200px;
+	display: inline-block;
+}
+
+.video-container {
+	position: relative;
+	margin: 10px 25px;
+	width: calc(100% - 50px);
+	height: calc(100% - 175px);
+	background: rgba(0, 0, 0, 1);
+}
+
+.video-container > video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.video-title {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: rgba(0, 0, 0, .6);
+	color: #ffffff;
+	padding: 15px 20px;
+	display: none;
+}
+
+.video-tips {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.video-tips > div {
+	text-align: center;
+}
+
+.video-tips > div > span {
+	margin-top: 10px;
+	color: #ffffff;
+	font-size: 18px;
+	display: inline-block;
+}
+
+/* table and pagination */
+input.form-control {
+	display: inline-block;
+	width: 150px;
+}
+.table-content {
+	padding: 10px 20px;
+}
+table > tbody > tr:first-child {
+	background: #efefef;
+	color: #666;
+}
+table > tbody > tr:last-child {
+	border-bottom: 1px solid #ddd;
+}
+.table > tbody > tr > td {
+	padding: 15px 0;
+}
+.total-pages {
+	margin: 20px;
+}
+.pages {
+	margin-right: 20px;
+}
+.pagination > li > a {
+	margin-right: 10px;
+	padding: 3px 8px;
+	color: #666;
+}
+.pagination + input {
+	width: 40px;
+	height: 30px;
+	display: inline-block;
+	vertical-align: top;
+	margin: 20px 0;
+}
+.pages button {
+	padding: 4px 12px;
+	vertical-align: top;
+	margin: 20px 0 20px 10px;
+}
+
+/* layer */
+.btn-container {
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+.btn-container > button {
+	margin: 10px;
+	padding: 6px 20px;
+	background: #ddd;
+}

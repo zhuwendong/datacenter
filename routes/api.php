@@ -19,4 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['namespace' => 'Api'], function(){
     Route::any('index','IndexController@index');
+    Route::any('subjectTeacher','IndexController@subjectTeacher');
+    Route::any('avg','IndexController@avg');
 });  //路由路径Controllers/Api/IndexController/index
