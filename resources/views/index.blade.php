@@ -6,9 +6,9 @@
         <span class='title'>当前位置：</span>
         <span>首页</span>
     </div>
-    <div class='title-box' style="text-align: center;">
+    <!-- <div class='title-box' style="text-align: center;">
         <span>合肥市第一小学</span>
-    </div>
+    </div> -->
     <div class='charts-container clearfix'>
         <div style='width:54%' class='charts-1 p-l'></div>
         <div style='width:44%' class='charts-2 p-r'></div>
@@ -61,27 +61,43 @@
                 barWidth:"20"
             },]
     });
-
-    Charts.getLine({
-        dom: ".charts-2",
-        title: "借书类型及数量折线图",
-        yValue:"(数量：本)",
-        xData: ['人物', '历史', '文学', '教育', '科学', '其他'],
-        legend: ['数量'],
-        yData: [{
-            name: '数量',
-            type: 'line',
-            itemStyle: {
-                normal: {
-                    color: '#ff0000',	// 折点自定义颜色
-                    lineStyle: {
-                        color: '#ff0000',	// 折线自定义颜色
-                    }
+    read();
+    function read(){
+        $.ajax({
+            type: "get",
+            // url:"http://47.96.171.165:8019/api/index",
+            url:"http://127.0.0.1:8022/api/index",
+            data: {},
+            dataType: "json",
+            success: function(data){
+                if(data.status == '200'){
+                    Charts.getLine({
+                        dom: ".charts-2",
+                        title: "借书类型及数量折线图",
+                        yValue:"(数量：本)",
+                        xData: ['人物', '历史', '文学', '教育', '科学', '其他'],
+                        legend: ['数量'],
+                        yData: [{
+                            name: '数量',
+                            type: 'line',
+                            itemStyle: {
+                                normal: {
+                                    color: '#ff0000',	// 折点自定义颜色
+                                    lineStyle: {
+                                        color: '#ff0000',	// 折线自定义颜色
+                                    }
+                                }
+                            },
+                            data: data.data,
+                        }], 
+                    });
+                }else{
+                    
                 }
-            },
-            data: [28, 25, 38, 24, 35, 26],
-        }], 
-    });
+            }
+        });
+    }
+    
 
     Charts.getMap({
         dom:".charts-3",
@@ -275,33 +291,47 @@
                 barWidth:"20"
             },]
     });
-
+    var subject = new Array();
+    var number = new Array();
+    @foreach ($teacher as $vo)
+    subject.push('{{ $vo['coursedetail'] }}');
+    @endforeach
+    @foreach ($teacher as $vo)
+    number.push({{ $vo['number'] }});
+    @endforeach
     Charts.getBar({
         dom:".charts-8",
         title:"科目教师数量柱状图",
         yValue:"(人数：人)",
-        xData:['语文', '数学', '英语', '政治', '历史','地理'],
+        xData:subject,
         legend:["人数"],
         yData:[{
                 name: '人数',
                 type: 'bar',
                 stack: '人数',
-                data: [12, 6, 26, 16, 31, 24],
+                data: number,
                 barWidth:'20',     
             }]
     });
-
+    var subject = new Array();
+    var number = new Array();
+    @foreach ($results as $vo)
+    subject.push('{{ $vo['gd_name'] }}');
+    @endforeach
+    @foreach ($results as $vo)
+    number.push({{ $vo['avg'] }});
+    @endforeach
     Charts.getBar({
         dom:".charts-9",
         title:"各年级最近一场考试总分平均数柱状图",
         yValue:"(分数：分)",
-        xData:['一年级', '二年级', '三年级', '四年级', '五年级','六年级'],
-        legend:["人数"],
+        xData:subject,
+        legend:["分数"],
         yData:[{
-                name: '人数',
+                name: '分数',
                 type: 'bar',
-                stack: '人数',
-                data: [45, 32, 72, 54, 81, 68],
+                stack: '分数',
+                data: number,
                 barWidth:'20',     
             }]
     });

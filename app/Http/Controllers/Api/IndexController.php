@@ -8,7 +8,7 @@ class IndexController extends Controller
 {
     //年级人数分布柱状图
     public function index(){
-        return response()->json(['status'=>200,'data'=>[28, 25, 38, 24, 35, 26]])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        return response()->json(['status'=>200,'data'=>[128, 25, 38, 24, 35, 26]])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
         // $grade = DB::table('grade')->select('gd_id','gd_name')->get();
         // $grade = json_decode(json_encode($grade), true);
         // $sex = [];

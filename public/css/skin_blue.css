@@ -1,0 +1,39 @@
+.default-style-color {
+    background-color: #0b9ade !important;
+}
+
+.blue-skin-bg-blue {
+    background: #0b9ade;
+}
+
+.blue-skin-bg-blue .menu-item {
+    background: #1492cd;
+}
+
+.basic-desktop-container .topbar-box .menu-btn {
+    background-color: #1492cd;
+}
+
+.basic-desktop-container .topbar-box .menu-btn .menu-child-list {
+    background-color: #202a36;
+}
+
+.basic-desktop-container .topbar-box .menu-btn .menu-child-list li:hover {
+    background-color: #0b9ade;
+}
+
+.blue-skin-bg-blue .layui-nav-bar {
+    background: #202a36;
+}
+.layui-side .layui-nav-tree .layui-nav-child .layui-this a {
+    background: #0b9ade!important;
+}
+.layui-side .layui-nav-tree .layui-nav-child a:hover {
+    background: #0b9ade!important;
+}
+.layui-side .layui-nav-tree .layui-this a {
+    background: #0b9ade!important;
+}
+.layui-side .layui-nav-tree a:hover {
+    background: #0b9ade!important;
+}

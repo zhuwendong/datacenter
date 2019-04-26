@@ -1,0 +1,45 @@
+.default-style-color {
+    background-color: #e45394 !important;
+}
+
+.blue-skin-bg-blue {
+    background: #e45394;
+}
+
+.blue-skin-bg-blue .menu-item {
+    background: #d7177a;
+}
+
+.blue-skin-bg-blue .layui-nav-bar {
+    background: #2b0512;
+}
+
+
+.basic-desktop-container .topbar-box .menu-btn {
+    background-color: #d7177a;
+}
+
+.basic-desktop-container .topbar-box .menu-btn .menu-child-list {
+    background-color: #2b0512;
+}
+
+.basic-desktop-container .topbar-box .menu-btn .menu-child-list li:hover {
+    background-color: #e45394;
+}
+
+
+.layui-side .layui-nav-tree .layui-nav-child .layui-this a {
+    background: #e45394!important;
+}
+.layui-side .layui-nav-tree .layui-nav-child a:hover {
+    background: #e45394!important;
+}
+
+.layui-side .layui-nav-tree .layui-this a {
+    background: #e45394!important;
+}
+.layui-side .layui-nav-tree a:hover {
+    background: #e45394!important;
+}
+
+

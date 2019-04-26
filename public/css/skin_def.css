@@ -1,0 +1,27 @@
+.default-style-color {
+    background-color: #2A52B1 !important;
+}
+
+.blue-skin-bg-blue {
+    background: #2A52B1;
+}
+
+.blue-skin-bg-blue .menu-item {
+    background: #1392cc;
+}
+
+.basic-desktop-container .topbar-box .menu-btn {
+    background-color: #1392cc;
+}
+
+.basic-desktop-container .topbar-box .menu-btn .menu-child-list {
+    background-color: #2A52B1;
+}
+
+.basic-desktop-container .topbar-box .menu-btn .menu-child-list li:hover {
+    background-color: #1392cc;
+}
+
+.blue-skin-bg-blue .layui-nav-bar {
+    background: #1392cc;
+}
