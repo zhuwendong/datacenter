@@ -11,6 +11,11 @@ class IndexController extends Controller
     public function bclass(){
         $data = DB::table('classset')->get();
         $data = json_decode(json_encode($data), true);
+        foreach($data as &$value){
+            $value['cp_name'] = DB::table('campus')->where(['cp_id'=>$value['cp_id']])->value('cp_name');
+            //(1:普通教室,2:多媒体教室,3:计算机教室,4:图书馆教室,5:会议室,6:科学实验室,7:仪器室,8:美术教室,9:音乐教室,10:体育室,11:其他
+        
+        }
         return response()->json(['status'=>200,'data'=>$data])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
