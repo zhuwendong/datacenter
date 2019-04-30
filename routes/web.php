@@ -47,6 +47,7 @@ Route::get('/tsgbase3','IndexController@tsgbase3');
 Route::get('/ykt','IndexController@ykt');
 Route::get('/kq','IndexController@kq');
 Route::get('/teach','IndexController@teach');
+Route::get('/getsemester','IndexController@getsemester');
 Route::get('/msg','IndexController@msg');
 Route::get('/set','IndexController@set');
 Route::get('/changeskin','IndexController@changeskin');

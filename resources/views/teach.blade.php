@@ -8,21 +8,32 @@
         <span>></span>
         <span><a href="">数据成绩分析</a></span>
     </div>
+    <form>
     <div style="margin-top: 20px;padding-left: 10px;">
         <label for="">校区：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' name="campus" id="">
             <option value="">请选择</option>
+            @foreach ($campus as $vo)
+                <option @isset($_REQUEST["campus"]) @if ($_REQUEST["campus"] == 1) selected @endif @endisset value="{{ $vo->cp_id }}">{{ $vo->cp_name }}</option>
+            @endforeach
         </select>
         <label for="">学年：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select id="syear" class='ipt ipt-xs' name="year" id="">
             <option value="">请选择</option>
+            @foreach ($year as $vo)
+            <option @isset($_REQUEST["year"]) @if ($_REQUEST["year"] == $vo->sy_id) selected @endif @endisset value="{{ $vo->sy_id }}">{{ $vo->sy_name }}</option>
+            @endforeach
         </select>
         <label for="">学期：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select id="semester" class='ipt ipt-xs' name="semester" id="">
             <option value="">请选择</option>
+            @foreach ($semesters as $vo)
+            <option @isset($_REQUEST["semester"]) @if ($_REQUEST["semester"] == $vo->se_id) selected @endif @endisset value="{{ $vo->se_id }}">@if ($vo->se_cid == 1)第一学期 @else第二学期@endif</option>
+            @endforeach
         </select>
-        <button class="btn btn-info">查询</button>
+        <button type="submit" class="btn btn-info">查询</button>
     </div>
+    </form>
     <hr class="line">
     <div class='charts-container clearfix'>
         <div style='width:100%' class='charts-1 p-l'></div>
@@ -45,12 +56,12 @@
         dom:".charts-1",
         title:"教学成绩分析",
         xData:['期中考试', '期末考试', '月考', '周考','模拟考'],
-        legend:['一年级','二年级','三年级','四年级'],
+        legend:['一年级','二年级','三年级','四年级','五年级','六年级'],
 
         yData:[{
             type: 'bar',
             name:"一年级",
-            data: [24, 31, 21,32,44],
+            data: [24, 31],
             barWidth:'20',
             color: ['#c23432'],
         },{
@@ -102,5 +113,32 @@
             }
         });
     }
+</script>
+<script>
+    //ajax获取学期
+	$("select#syear").change(function(){
+	    var semester=document.getElementById('semester');
+        var id=$("#syear option:selected").val();
+        $.ajax({
+          url:"/getsemester",
+          data:{id:id},
+          async:false,
+          success:function(res) {
+			//  console.log(res.data);
+            $("#semester").empty();
+            semester.options.add(new Option("请选择",' '));
+            $.each(res.data, function(i, item){     
+            if(item.se_cid == 1){
+                    // semester.append('<option value='"+item.se_id+"'>第一学期</option>');
+                semester.options.add(new Option("第一学期",item.se_id)); 
+                }else{
+                    // semester.append('<option value='"+item.se_id+"'>第二学期</option>');
+                semester.options.add(new Option("第二学期",item.se_id)); 
+                }
+            });
+            console.log(semester);
+          }
+        }) 
+	})
 </script>
 @endsection

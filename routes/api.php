@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['namespace' => 'Api'], function(){
+    Route::any('class','IndexController@bclass');
     Route::any('index','IndexController@index');
     Route::any('subjectTeacher','IndexController@subjectTeacher');
     Route::any('avg','IndexController@avg');

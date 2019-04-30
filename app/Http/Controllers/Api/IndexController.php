@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class IndexController extends Controller
 {
+
+    //教室接口
+    public function bclass(){
+        $data = DB::table('classset')->get();
+        $data = json_decode(json_encode($data), true);
+        return response()->json(['status'=>200,'data'=>$data])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+    }
+
     //年级人数分布柱状图
     public function index(){
         return response()->json(['status'=>200,'data'=>[128, 25, 38, 24, 35, 26]])->setEncodingOptions(JSON_UNESCAPED_UNICODE);

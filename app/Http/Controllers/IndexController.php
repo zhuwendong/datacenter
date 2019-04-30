@@ -38,7 +38,15 @@ class IndexController extends Controller
                 $color = 'pink';
             }
         }
-        View()->share('color', $color); 
+        View()->share('color', $color);
+        
+        //基础信息
+        $campuss = DB::table('campus')->get();
+        $grades = DB::table('grade')->get();
+        $bclasss = DB::table('bclass')->get();
+        View()->share('campus',$campuss);
+        View()->share('grade',$grades);
+        View()->share('bclass',$bclasss);
     }
 
     /**
@@ -269,8 +277,12 @@ class IndexController extends Controller
     public function kq(){
         return view('kq');
     }
-    public function teach(){
-        return view('teach');
+    public function teach(request $request){
+        $year = DB::table('syear')->get();
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        
+        return view('teach',['year'=>$year,'semesters'=>$semesters]);
     }
     public function msg(){
         return view('msg');
@@ -279,11 +291,19 @@ class IndexController extends Controller
         return view('set');
     }
 
+    //换肤
     public function changeskin(Request $request){
         // $uid = session('user_id');
         $uid = session('user_id');
         $skin = $request->get('cvalue');
         $data['skin'] = $skin;
         DB::table('admin')->where(['ad_uid'=>$uid])->update($data);
+    }
+
+    //根据学年获取学期
+    public function getsemester(request $request){
+        $id = $request->get('id');
+        $data = DB::table('semester')->where(['sy_id'=>$id])->get();
+        return response()->json(['status'=>200,'data'=>$data])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 }
