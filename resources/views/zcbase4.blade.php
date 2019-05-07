@@ -9,10 +9,10 @@
         <span><a href="">总产基础分析</a></span>
     </div>   
     <div style='margin:20px 0' class='nav-tab-box-2'>
-        <span class="tab-item on">总体统计</span>
-        <span class="tab-item">取得统计</span>
-        <span class="tab-item">处置统计</span>
-        <span class="tab-item">领用统计</span>
+        <a href="/zcbase"><span class="tab-item on">总体统计</span></a>
+        <a href="/zcbase1"><span class="tab-item">取得统计</span></a>
+        <a href="/zcbase2"><span class="tab-item">处置统计</span></a>
+        <a href="/zcbase3"><span class="tab-item">领用统计</span></a>
     </div>
     <hr/>
     <div style='margin:15px 0;' class='select-box'>
@@ -43,10 +43,18 @@
     })
 
     var Charts = new Charts();
+    var data = new Array();
+    var min  = new Array();
+    var max  = new Array();
+    @foreach ($data as $value)
+    data.push('{{ $value->name }}');
+    min.push({{ $value->min }});
+    max.push({{ $value->max }});
+    @endforeach
     Charts.getHandstandBar({
         dom: '.charts-1',
         title:"资产价值统计",
-        xData:['分类1', '分类2', '分类3', '分类4', '分类5','分类6','分类7', '分类8', '分类9', '分类10', '分类11','分类12'],
+        xData:data,
         legend: ['bar', 'bar2'],
         color: ['#438AFD','#438AFD'],
         yData:[
@@ -67,7 +75,7 @@
                         }
                     },
                     barWidth: '30',
-                    data: [-52, -9, -18, -75, -54, -30, -18, -66, -54, -18, -50, -19]
+                    data: min
                 },{
                     name: 'bar2',
                     type: 'bar',
@@ -84,7 +92,7 @@
                         }
                     },
                     barWidth: '30',
-                    data: [20, 28, 35, 30, 42, 15, 48, 36, 20, 32, 44, 44]
+                    data: max
                 },
             ]
     });

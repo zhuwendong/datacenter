@@ -47,29 +47,38 @@
         $(this).addClass("on").siblings(".tab-item").removeClass("on");
     })
     var Charts = new Charts();
+    var data = new Array();
+    var data1 = new Array();
+    @foreach ($data as $value)
+       data.push('{{ $value->name }}');
+       data1.push({
+            value: {{ $value->count }},
+            name: '{{ $value->name }}',
+        });
+    @endforeach
     Charts.getQpie({
         dom:".charts-1",
         h1:400,
         h2:375,
         title:"分类及金融占比",
-        legend:['电器类','日常消耗品','办公用品类','电器类金额占比','日常消耗品金额占比','办公用品类金额占比'],
-        data1:[
-            {value:335, name:'电器类'},
-            {value:310, name:'日常消耗品'},
-            {value:234, name:'办公用品类'},
-        ],
-        data2:[{
-            value: 5425,
-            name: '电器类金额占比',
-        },
-        {
-            value: 3100,
-            name: '日常消耗品金额占比',
-        }, {
-            value: 1800,
-            name: '办公用品类金额占比',
-        }]
+        legend:data,
+        // data1:[
+        //     {value:335, name:'电器类'},
+        //     {value:310, name:'日常消耗品'},
+        //     {value:234, name:'办公用品类'},
+        // ],
+        data2:data1
     });
+    var data2 = new Array();
+    var data3 = new Array();
+    @foreach ($obtain as $value)
+    data2.push('{{ $value->name }}');
+    data3.push({
+                value: {{ $value->count }},
+                name: '{{ $value->name }}',
+                selected: true
+            });
+    @endforeach
     Charts.getPie({
         type:"3",
         dom:".charts-2",
@@ -77,23 +86,19 @@
         h2:375,
         title:"取得方式占比",
         series_name:"取得方式占比",
-        xDatas:['购买','受赠','其他'],
-        data:[{
-                value: 211,
-                name: '购买',
-                selected: true
-            },
-            {
-                value: 56,
-                name: '受赠',
-                selected: true
-            },
-            {
-                value: 222,
-                name: '其他',
-                selected: true
-            }]
+        xDatas:data2,
+        data:data3
     })
+    var data4 = new Array();
+    var data5 = new Array();
+    @foreach ($obtain as $value)
+    data4.push('{{ $value->name }}');
+    data5.push({
+                value: {{ $value->count }},
+                name: '{{ $value->name }}',
+                selected: true
+            });
+    @endforeach
     Charts.getPie({
         type:"2",
         dom:".charts-3",
@@ -101,47 +106,19 @@
         h2:375,
         title:"处置方式占比",
         series_name:"处置方式占比",
-        xDatas:['销毁','赠送','其他'],
-        data:[{
-                value: 211,
-                name: '销毁',
-                selected: true
-            },
-            {
-                value: 56,
-                name: '赠送',
-                selected: true
-            },
-            {
-                value: 222,
-                name: '其他',
-                selected: true
-            }]
+        xDatas:data4,
+        data:data5
     })
-    Charts.getQpie2({
-        dom:".charts-4",
-        h1:400,
-        h2:375,
-        title:"处置方式占比",
-        legend:['','',''],
-        series_name:"处置方式占比",
-        xDatas:['销毁','赠送','其他'],
-        data:[{
-                value: 211,
-                name: '销毁',
-                selected: true
-            },
-            {
-                value: 56,
-                name: '赠送',
-                selected: true
-            },
-            {
-                value: 222,
-                name: '其他',
-                selected: true
-            }]
-    })
+    // Charts.getQpie2({
+    //     dom:".charts-4",
+    //     h1:400,
+    //     h2:375,
+    //     title:"处置方式占比",
+    //     legend:['','',''],
+    //     series_name:"处置方式占比",
+    //     xDatas:data4,
+    //     data:data5
+    // })
 </script>
 <script>
     $('#tj').change(function(){

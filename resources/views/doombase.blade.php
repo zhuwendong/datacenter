@@ -13,13 +13,18 @@
         <a href="/doombase1"><span class="tab-item">出入分时段</span></a>
         <a href="/doombase2"><span class="tab-item">宿舍分布</span></a>
     </div>
+    <form>
     <div class=''>
         <label for="">校区：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' name="campus" id="">
             <option value="">请选择</option>
+            @foreach ($campus as $vo)
+                <option @isset($_REQUEST["campus"]) @if ($_REQUEST["campus"] == 1) selected @endif @endisset value="{{ $vo->cp_id }}">{{ $vo->cp_name }}</option>
+            @endforeach
         </select>
-        <button class="btn btn-info">查询</button>
+        <button type="submit" class="btn btn-info">查询</button>
     </div>
+    </form>
     <hr/>
     <div class='charts-container clearfix'>
         <div style='width:100%' class='charts-1 p-l'></div>
@@ -29,13 +34,19 @@
 @section('footer')
 <script>   
 	var Charts = new Charts();
+    var data = new Array();
+    var data2 = new Array();
+    @foreach ($doom as $vo)
+    data.push({{ $vo->doom }});
+    data2.push({{ $vo->undoom }});
+    @endforeach
 	Charts.getPBarPie({
         title:"入住详细",
         dom:".charts-1",
         h1:400,
         h2:380,
         type:"1",
-        yValue:"（数量：件）",
+        yValue:"（数量：人）",
         data1:{
             legend:['非住宿','住宿'],
             xData:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'],
@@ -45,14 +56,14 @@
                     type: 'bar',
                     barWidth:40,
                     stack: '用户数',
-                    data: [1200, 1320, 1010, 1340, 900, 500]
+                    data: data2
                 },
                 {
                     name: '住宿',
                     type: 'bar',
                     barWidth:40,
                     stack: '用户数',
-                    data: [220, 182, 191, 234, 290, 300]
+                    data: data
                 }
                 
             ]
@@ -61,12 +72,12 @@
             series_name:"年级",
             xData:['非住宿','住宿'],
             data:[{
-                value: 46,
+                value: {{ $undooms }},
                 name: '非住宿',
                 selected: true
             },
             {
-                value: 54,
+                value: {{ $dooms }},
                 name: '住宿',
                 selected: true
             }]

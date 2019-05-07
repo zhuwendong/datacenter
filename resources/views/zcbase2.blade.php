@@ -18,7 +18,7 @@
     <div class='charts-container clearfix'>
         <div style='width:54%;position: relative;' class='charts-1 p-l'>
             <div class='nav-tab-box-3' style="position: absolute;top: 60px;text-align: center;width: 100%;">
-                <span class="tab-item on">处置方式1</span><span class="tab-item">处置方式2</span><span class="tab-item">处置方式3</span>
+                @foreach ($disposal as $value)<span class="tab-item @if ($dp == $value->id) on @endif"><a href="/zcbase2?dp={{$value->id}}">{{ $value->name }}</a></span>@endforeach
             </div>
         </div>
         <div style='width:44%' class='charts-2 p-r'></div>
@@ -28,39 +28,41 @@
 @section('footer')
 <script>   
 	var Charts = new Charts();
+    var data = new Array();
+    var data1 = new Array();
+    @foreach ($data as $value)
+    data.push('{{ $value->name }}');
+    data1.push({{ $value->count }});
+    @endforeach
     Charts.getBar({
         dom:".charts-1",
         title:"处置统计",
         yValue:"（金额：万元）",
-        xData:['分类1', '分类2', '分类3', '分类4'],
+        xData:data,
         yData:[{
             type: 'bar',
-            data: [24, 40, 52, 52],
+            data: data1,
             barWidth:'30',     
         }]
     });
-
+    var data2 = new Array();
+    var data3 = new Array();
+    @foreach ($disposal as $value)
+    data2.push('{{$value->name}}');
+    data3.push({
+            value: {{ $value->count }},
+            name: '{{ $value->name }}',
+            selected: true
+        });
+    @endforeach
     Charts.getPie({
         title:"处置方式占比",
         dom:".charts-2",
         type:"1",
         series_name:"年级",
-		xDatas:['处置方式1','处置方式2','处置方式3'],
+		xDatas:data2,
 		color:['#FEC84E','#F34334','#6CC693'],
-        data:[{
-            value: 335,
-            name: '处置方式1',
-            selected: true
-        },
-        {
-            value: 310,
-            name: '处置方式2',
-            selected: true
-        }, {
-            value: 280,
-            name: '处置方式3',
-            selected: true
-        },]
+        data:data3
     });
 </script>
 @endsection

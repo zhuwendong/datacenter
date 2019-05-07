@@ -52,36 +52,82 @@
     })
 
     var Charts = new Charts();
+    var data = new Array();
+    @foreach ($exam as $vo)
+    data.push('{{ $vo->name }}');
+    @endforeach
+    
+    var data1 = new Array();
+    @foreach ($data1 as $vo)
+    data1.push({{ $vo }});
+    @endforeach
+
+    var data2 = new Array();
+    @foreach ($data2 as $vo)
+    data2.push({{ $vo }});
+    @endforeach
+
+    var data3 = new Array();
+    @foreach ($data3 as $vo)
+    data3.push({{ $vo }});
+    @endforeach
+
+    var data4 = new Array();
+    @foreach ($data4 as $vo)
+    data4.push({{ $vo }});
+    @endforeach
+
+    var data5 = new Array();
+    @foreach ($data5 as $vo)
+    data5.push({{ $vo }});
+    @endforeach
+
+    var data6 = new Array();
+    @foreach ($data6 as $vo)
+    data6.push({{ $vo }});
+    @endforeach
     Charts.getBar({
         dom:".charts-1",
         title:"教学成绩分析",
-        xData:['期中考试', '期末考试', '月考', '周考','模拟考'],
+        xData:data,
         legend:['一年级','二年级','三年级','四年级','五年级','六年级'],
 
         yData:[{
             type: 'bar',
             name:"一年级",
-            data: [24, 31],
+            data: data1,
             barWidth:'20',
             color: ['#c23432'],
         },{
             type: 'bar',
             name:"二年级",
-            data: [22, 11, 44,31,24],
+            data: data2,
             barWidth:'20',
             color: ['#d48161'],
         },{
             type: 'bar',
             name:"三年级",
-            data: [20, 22,31,12,24],
+            data: data3,
             barWidth:'20',
             color: ['#90c6ae'],
         },{
             type: 'bar',
             name:"四年级",
-            data: [44,78,52,44,66],
+            data: data4,
             barWidth:'20',
             color: ['#6c6f74'],
+        },{
+            type: 'bar',
+            name:"五年级",
+            data: data5,
+            barWidth:'20',
+            color: ['#c23432'],
+        },{
+            type: 'bar',
+            name:"六年级",
+            data: data6,
+            barWidth:'20',
+            color: ['#d48161'],
         }]
     })
 

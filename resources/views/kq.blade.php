@@ -8,21 +8,26 @@
         <span>></span>
         <span><a href="">考勤出勤分析</a></span>
     </div>
+    <form>
     <div style="margin-top: 20px;padding-left: 10px;">
         <label for="">校区：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' name="campus" id="">
             <option value="">请选择</option>
+            @foreach ($campus as $vo)
+                <option @isset($_REQUEST["campus"]) @if ($_REQUEST["campus"] == 1) selected @endif @endisset value="{{ $vo->cp_id }}">{{ $vo->cp_name }}</option>
+            @endforeach
         </select>
         <label for="">日期：</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input" id="test11" placeholder="请选择">
+            <input type="text" name="time1" value="@isset($_REQUEST["time1"]){{ $_REQUEST['time1'] }}@endisset" class="layui-input" id="test11" placeholder="请选择">
         </div>
         <label for="">--</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input" id="test12" placeholder="请选择">
+            <input type="text" name="time2" value="@isset($_REQUEST["time2"]){{ $_REQUEST['time2'] }}@endisset" class="layui-input" id="test12" placeholder="请选择">
         </div>
-        <button class="btn btn-info">查询</button>
+        <button type="submit" class="btn btn-info">查询</button>
     </div>
+    </form>
     <hr class="line">
     <div class='charts-container clearfix'>
         <div style='width:48%' class='charts-1 p-l'></div>
@@ -46,13 +51,17 @@
         $(this).addClass("on").siblings(".tab-item").removeClass("on");
     })
     var Charts = new Charts();
+    var data = new Array();
+    @foreach ($orgniza as $vo)
+    data.push('{{ $vo->og_name }}');
+    @endforeach
     Charts.getPBar({
         title:"考勤出勤分析",
         dom:".charts-1",
         h1:400,
         h2:380,
         legend:['迟到', '正常','缺勤'],
-        xData:['机构1','机构2','机构3','机构4','机构5'],
+        xData:data,
         data:[
             {
                 name: '迟到',
@@ -60,7 +69,7 @@
                 stack: '总数',
                 barWidth:'30',
                 color: ['#c23432'],
-                data: [120, 132,  230, 210,211,]
+                data: [120]
             },
             {
                 name: '正常',
@@ -68,7 +77,7 @@
                 stack: '总数',
                 barWidth:'30',
                 color: ['#fcb448'],
-                data: [234, 290, 310,552,121]
+                data: [234]
             },
             {
                 name: '缺勤',
@@ -76,7 +85,7 @@
                 stack: '总数',
                 barWidth:'30',
                 color: ['#6ec694'],
-                data: [ 290, 330, 310,122,122]
+                data: [ 292]
             }
 
         ]
@@ -108,11 +117,11 @@
             //执行一个laydate实例
             laydate.render({
                 elem: '#test11',
-                format: 'yyyy年MM月dd日'
+                format: 'yyyy-MM-dd'
             });
             laydate.render({
                 elem: '#test12',
-                format: 'yyyy年MM月dd日'
+                format: 'yyyy-MM-dd'
             });
     });
 </script>

@@ -233,32 +233,136 @@ class IndexController extends Controller
         return view('stufee4');
     }
     public function zcbase(){
-        return view('zcbase');
+        //分类占比
+        $data = DB::select('select * from bp_assets_classify where pid =0');
+        foreach($data as &$value){
+            $classify = DB::table('assets_classify')->where(['pid'=>$value->id])->pluck('id');
+            $classify = json_decode(json_encode($classify), true);
+            // var_dump($classify);
+            $pluck = DB::table('assets')->whereIn('assets_classify_id',$classify)->count();
+            $value->count = $pluck;
+        }
+
+        //取得方式占比
+        $obtain = DB::table('obtain')->get();
+        foreach($obtain as &$value){
+            $count = DB::table('assets')->where(['obtain_id'=>$value->id])->count();
+            $value->count = $count;
+        }
+
+        //处置方式
+        $disposal = DB::table('disposal')->get();
+        foreach($disposal as &$value){
+            $count = DB::table('assets')->where(['disposal_id'=>$value->id])->count();
+            $value->count = $count;
+        }
+        return view('zcbase',['data'=>$data,'obtain'=>$obtain,'disposal'=>$disposal]);
     }
-    public function zcbase1(){
-        return view('zcbase1');
+    public function zcbase1(request $request){
+        $obtain = DB::table('obtain')->get();
+        foreach($obtain as &$value){
+            $count = DB::table('assets')->where(['obtain_id'=>$value->id])->count();
+            $value->count = $count;
+        }
+        
+        $ob = $request->get('obtain');
+        if(!isset($ob) && empty($ob)){
+            $ob = DB::table('obtain')->value('id');
+        }
+        $map['obtain_id'] = $ob;
+        $data = DB::select('select * from bp_assets_classify where pid =0');
+        foreach($data as $value){
+            $classify = DB::table('assets_classify')->where(['pid'=>$value->id])->pluck('id');
+            $classify = json_decode(json_encode($classify), true);
+            // var_dump($classify);
+            $value->count = DB::table('assets')->where($map)->whereIn('assets_classify_id',$classify)->sum('money');
+        }
+        return view('zcbase1',['obtain'=>$obtain,'ob'=>$ob,'data'=>$data]);
     }
-    public function zcbase2(){
-        return view('zcbase2');
+    public function zcbase2(request $request){
+        //处置方式
+        $disposal = DB::table('disposal')->get();
+        $dp = $request->get('dp');
+        if(!isset($dp) && empty($dp)){
+            $dp = DB::table('disposal')->value('id');
+        }
+        $data = DB::select('select * from bp_assets_classify where pid =0');
+        foreach($data as &$value){
+            $classify = DB::table('assets_classify')->where(['pid'=>$value->id])->pluck('id');
+            $classify = json_decode(json_encode($classify), true);
+            // var_dump($classify);
+            $value->count = DB::table('assets')->where(['disposal_id'=>$dp])->whereIn('assets_classify_id',$classify)->sum('money');
+        }
+        foreach($disposal as &$value){
+            $value->count = DB::table('assets')->where(['disposal_id'=>$value->id])->count();
+        }
+        return view('zcbase2',['disposal'=>$disposal,'dp'=>$dp,'data'=>$data]);
     }
     public function zcbase3(){
         return view('zcbase3');
     }
     public function zcbase4(){
-        return view('zcbase4');
+        //分类占比
+        $data = DB::select('select * from bp_assets_classify where pid =0');
+        foreach($data as &$value){
+            $classify = DB::table('assets_classify')->where(['pid'=>$value->id])->pluck('id');
+            $classify = json_decode(json_encode($classify), true);
+            // var_dump($classify);
+            $value->min = DB::table('assets')->whereIn('assets_classify_id',$classify)->min('money');
+            $value->max = DB::table('assets')->whereIn('assets_classify_id',$classify)->max('money');
+        }
+        return view('zcbase4',['data'=>$data]);
     }
-    public function doombase(){
-        return view('doombase');
+    public function doombase(request $request){
+        
+        $campus = $request->get('campus');
+        if(isset($campus) && !empty($campus)){
+            $map['cp_id'] = $campus;  
+        }
+        $grade = DB::table('grade')->get();
+        foreach($grade as &$value){
+            $map['gd_id'] = $value->gd_id;
+            $map['ad_status'] = 1;
+            $total = DB::table('admin')->where($map)->count();
+            $value->doom = DB::table('dm_stay')->where(['grade_id'=>$value->gd_id])->count();
+            $value->undoom = $total-$value->doom;
+        }
+        $where['ad_status'] = 1;
+        $where['rs_id'] = 3;
+        $con = [];
+        if(isset($campus) && !empty($campus)){
+            $where['cp_id'] = $campus;
+            $con['campus_id'] = $campus;    
+        }
+        $total = DB::table('admin')->where($where)->count();
+        $doom  = DB::table('dm_stay')->where($con)->count();
+        // var_dump($doom);
+        return view('doombase',['doom'=>$grade,'dooms'=>$doom,'undooms'=>$total-$doom]);
     }
     public function doombase1(){
         return view('doombase1');
     }
-    public function doombase2(){
-        return view('doombase2');
+    public function doombase2(request $request){
+        $build = DB::table('dm_build')->get();
+        foreach($build as &$value){
+            $map['build_id'] = $value->id;
+            $value->count = DB::table('dm_stay')->where($map)->count();
+        }
+        $build_id = $request->get('id');
+        if(!isset($build_id) || empty($build_id)){
+            $build_id = DB::table('dm_build')->value('id');
+        }
+        $map['build_id'] = $build_id;
+        $grade = DB::table('grade')->get();
+        foreach($grade as &$value){
+            $map['grade_id'] = $value->gd_id;
+            $value->count = DB::table('dm_stay')->where($map)->count();
+        }
+        return view('doombase2',['build'=>$build,'build_id'=>$build_id,'grade'=>$grade]);
     }
-    public function doombase3(){
-        return view('doombase3');
-    }
+    // public function doombase3(){
+    //     return view('doombase3');
+    // }
     public function tsgbase(){
         return view('tsgbase');
     }
@@ -274,15 +378,61 @@ class IndexController extends Controller
     public function ykt(){
         return view('ykt');
     }
-    public function kq(){
-        return view('kq');
+    public function kq(request $request){
+        $orgniza = DB::table('orgniza')->get();
+        
+        return view('kq',['orgniza'=>$orgniza]);
     }
     public function teach(request $request){
         $year = DB::table('syear')->get();
         $years = $request->get('year');
         $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
-        
-        return view('teach',['year'=>$year,'semesters'=>$semesters]);
+        $exam = DB::table('exam')->get();
+        // $grade = DB::table('grade')->get();
+        // $grade = json_decode(json_encode($grade), true);
+        $class1 = DB::table('bclass')->where(['gd_id'=>17])->pluck('cl_id');
+        $data1 = [];
+        foreach($exam as $value){
+            $map['exam_id'] = $value->id;
+            $data1[] = DB::table('score')->where($map)->whereIn('cl_id',$class1)->count();
+        }
+
+        $class2 = DB::table('bclass')->where(['gd_id'=>18])->pluck('cl_id');
+        $data2 = [];
+        foreach($exam as $value){
+            $map['exam_id'] = $value->id;
+            $data2[] = DB::table('score')->where($map)->whereIn('cl_id',$class2)->count();
+        }
+
+        $class3 = DB::table('bclass')->where(['gd_id'=>19])->pluck('cl_id');
+        $data3 = [];
+        foreach($exam as $value){
+            $map['exam_id'] = $value->id;
+            $data1[] = DB::table('score')->where($map)->whereIn('cl_id',$class3)->count();
+        }
+
+        $class4 = DB::table('bclass')->where(['gd_id'=>20])->pluck('cl_id');
+        $data4 = [];
+        foreach($exam as $value){
+            $map['exam_id'] = $value->id;
+            $data4[] = DB::table('score')->where($map)->whereIn('cl_id',$class4)->count();
+        }
+
+        $class5 = DB::table('bclass')->where(['gd_id'=>21])->pluck('cl_id');
+        $data5 = [];
+        foreach($exam as $value){
+            $map['exam_id'] = $value->id;
+            $data5[] = DB::table('score')->where($map)->whereIn('cl_id',$class5)->count();
+        }
+
+        $class6 = DB::table('bclass')->where(['gd_id'=>22])->pluck('cl_id');
+        $data6 = [];
+        foreach($exam as $value){
+            $map['exam_id'] = $value->id;
+            $data6[] = DB::table('score')->where($map)->whereIn('cl_id',$class6)->count();
+        }
+        return view('teach',['year'=>$year,'semesters'=>$semesters,'exam'=>$exam,'data1'=>$data1,
+        'data2'=>$data2,'data3'=>$data3,'data4'=>$data4,'data5'=>$data5,'data6'=>$data6]);
     }
     public function msg(){
         return view('msg');
