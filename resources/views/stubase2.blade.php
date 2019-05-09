@@ -15,19 +15,30 @@
                 <a href="/stubase3"><span class="tab-item">调动统计</span></a>
             </div>
             <div class=''>
+            <form>
                 <label for="">校区：</label>
-                <select class='ipt ipt-xs' name="" id="">
+                <select class='ipt ipt-xs' name="campus" id="">
                     <option value="">请选择</option>
+                    @foreach ($campus as $vo)
+                    <option @isset($_REQUEST["campus"]) @if ($_REQUEST["campus"] == 1) selected @endif @endisset value="{{ $vo->cp_id }}">{{ $vo->cp_name }}</option>
+                    @endforeach
                 </select>
                 <label for="">年级：</label>
-                <select class='ipt ipt-xs' name="" id="">
+                <select class='ipt ipt-xs' name="grade" id="">
                     <option value="">请选择</option>
+                    @foreach ($grade as $vo)
+                    <option @isset($_REQUEST["grade"]) @if ($_REQUEST["grade"] == $vo->gd_id) selected @endif @endisset value="{{ $vo->gd_id }}">{{ $vo->gd_name }}</option>
+                    @endforeach
                 </select>
                 <label for="">班级：</label>
-                <select class='ipt ipt-xs' name="" id="">
+                <select class='ipt ipt-xs' name="class" id="">
                     <option value="">请选择</option>
+                    @foreach ($bclass as $vo)
+                    <option @isset($_REQUEST["class"]) @if ($_REQUEST["class"] == $vo->cl_id) selected @endif @endisset value="{{ $vo->cl_id }}">{{ $vo->cl_name }}</option>
+                    @endforeach
                 </select>
-                <button class="btn btn-info">查询</button>
+                <button type="submit" class="btn btn-info">查询</button>
+            </form>
             </div>
             <div class='title-box'>
                 <span class='icon-student'></span>
@@ -61,33 +72,31 @@
         $(this).addClass("on").siblings(".tab-item").removeClass("on")
     })
     var Charts = new Charts();
+    var data = new Array();
+    var data1 = new Array();
+    var data2 = new Array();
+    @foreach ($data as $value)
+    data.push('{{ $value->name }}');
+    data1.push({{ $value->count }});
+    data2.push({
+                value: {{ $value->count }},
+                name: '{{ $value->name }}',
+                selected: true
+            });
+    @endforeach
     Charts.getBarPie({
         dom:".charts-1",
         title:"学籍状态统计",
         h1:400,
         h2:375,
         barData:{
-            xData:['休学','保留','在籍'],
-            yData:[100, 152, 200]
+            xData:data,
+            yData:data1
         },
         pieData:{
             type:"1",
-            xData:['休学','保留','在籍'],
-            data:[{
-                value: 100,
-                name: '休学',
-                selected: true
-            },
-            {
-                value: 152,
-                name: '保留',
-                selected: true
-            },
-            {
-                value: 200,
-                name: '在籍',
-                selected: true
-            }]
+            xData:data,
+            data:data2
 
         }
     })

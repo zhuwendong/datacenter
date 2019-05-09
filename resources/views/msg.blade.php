@@ -28,6 +28,7 @@
                 <td>预警时间</td>
                 <td>操作</td>
             </tr>
+            @foreach ($data as $value)
             <tr>
                 <td width="10%">
                     <input type="checkbox" value="" checked="">
@@ -36,54 +37,12 @@
                 <td>评价分数</td>
                 <td>评价分数小于60分</td>
                 <td>2019年2月21日  16：00</td>
-                <td><a href="">删除</a></td>
+                <td><a>删除</a></td>
             </tr>
-            <tr>
-                <td width="10%">
-                    <input type="checkbox" value="">
-                </td>
-                <td>教职工基础分析</td>
-                <td>评价分数</td>
-                <td>评价分数小于60分</td>
-                <td>2019年2月21日  16：00</td>
-                <td><a href="">删除</a></td>
-            </tr>
-            <tr>
-                <td width="10%">
-                    <input type="checkbox" value="">
-                </td>
-                <td>教职工基础分析</td>
-                <td>评价分数</td>
-                <td>评价分数小于60分</td>
-                <td>2019年2月21日  16：00</td>
-                <td><a href="">删除</a></td>
-            </tr>
+            @endforeach
             </tbody></table>
     </div>
-    <div class="total-pages pull-left"><span>共3158条记录</span></div>
-    <nav aria-label="Page navigation" class="pages pull-right">
-        <ul class="pagination">
-            <li>
-                <a href="#" aria-label="Previous">
-                    <span aria-hidden="true">上一页</span>
-                </a>
-            </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">...</a></li>
-            <li class="active"><a href="#">5</a></li>
-            <li><a href="#">6</a></li>
-            <li><a href="#">7</a></li>
-            <li><a href="#">...</a></li>
-            <li><a href="#">27</a></li>
-            <li>
-                <a href="#" aria-label="Next">
-                    <span aria-hidden="true">下一页</span>
-                </a>
-            </li>
-        </ul>
-        <input class="form-control" type="text" value="">
-        <button type="button" class="btn btn-primary">跳转</button>
-    </nav>
+    {{ $data->links() }}
 
 </div>
 @endsection

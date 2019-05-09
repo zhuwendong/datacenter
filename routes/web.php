@@ -51,3 +51,7 @@ Route::get('/getsemester','IndexController@getsemester');
 Route::get('/msg','IndexController@msg');
 Route::get('/set','IndexController@set');
 Route::get('/changeskin','IndexController@changeskin');
+Route::get('/addset','IndexController@addset');
+Route::get('/deleteset','IndexController@deleteset');
+Route::get('/editset','IndexController@editset');
+Route::get('/updateset','IndexController@updateset');

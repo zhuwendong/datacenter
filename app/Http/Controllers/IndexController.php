@@ -87,7 +87,9 @@ class IndexController extends Controller
             $count2 = DB::table('admin')->where($map)->count();
             $sex2[] = $count2;
         }
-
+        //教师/学生籍贯分布
+        $jiguan = DB::select('select count(*) as count,s_jiguan from bp_sxd_student_info group by s_jiguan');
+        
         //科目教师数量柱状图
         $teacher = DB::select('select `course`, `coursedetail`,count(`course`) as number from `bp_pk_coursedetail` group by `course` order by `course` asc');
         $teacher = json_decode(json_encode($teacher), true);
@@ -101,7 +103,7 @@ class IndexController extends Controller
             $avg = Db::table('score')->whereIn('exam_id',$exam)->avg('score');
             $value['avg'] = round($avg,2);
         }
-        return view('index',['sex1'=>$sex1,'sex2'=>$sex2,'teacher'=>$teacher,'results'=>$results]);
+        return view('index',['sex1'=>$sex1,'sex2'=>$sex2,'teacher'=>$teacher,'results'=>$results,'jiguan'=>$jiguan]);
     }
 
     //学生基础分析
@@ -187,18 +189,32 @@ class IndexController extends Controller
         return view('stubase1',['campus'=>$campuss,'grade'=>$grades,'class'=>$bclasss
         ,'count'=>$count,'jiguan'=>$jiguan]);
     }
-    public function stubase2(){
-        
-        return view('stubase2');
+    public function stubase2(request $request){
+        $data = DB::select('select count(*) as count,s_xuejizhuangtai from bp_sxd_student_info group by s_xuejizhuangtai');
+        foreach($data as &$value){
+            if($value->s_xuejizhuangtai == 1){
+                $value->name = '未毕业';
+            }else{
+                $value->name = '已毕业';
+            }
+        }
+        return view('stubase2',['data'=>$data]);
     }
+
+    public function stubase4(){
+        $data = DB::table('grade')->get();
+        foreach($data as &$value){
+            $ad_num = DB::table('admin')->where(['gd_id'=>$value->gd_id])->pluck('ad_num');
+            $value->count = DB::table('sxd_reward')->whereIn('xuehao',$ad_num)->count();
+        }
+        return view('stubase4',['data'=>$data]);
+    }
+
     public function stubase3(){
         
         return view('stubase3');
     }
-
-    public function stubase4(){
-        return view('stubase4');
-    }
+    
     public function stubase5(){
         return view('stubase5');
     }
@@ -435,10 +451,43 @@ class IndexController extends Controller
         'data2'=>$data2,'data3'=>$data3,'data4'=>$data4,'data5'=>$data5,'data6'=>$data6]);
     }
     public function msg(){
-        return view('msg');
+        $data = DB::table('setting_msg')->paginate(5);
+        return view('msg',['data'=>$data]);
     }
     public function set(){
-        return view('set');
+        $data = DB::table('setting')->paginate(5);
+        foreach($data as &$value){
+            $value->time = date('Y-m-d H:i:s',$value->add_time);
+        }
+        return view('set',['data'=>$data]);
+    }
+
+    public function addset(Request $request){
+        $rq = $request->all();
+        $rq['add_time'] = time();
+        $res = DB::table('setting')->insert($rq);
+        if($res){
+            
+        }
+    }
+
+    public function deleteset(Request $request){
+        $id = $request->get('id');
+        $res = DB::table('setting')->where('id','=',$id)->delete();
+       
+    }
+
+    public function editset(Request $request){
+        $id = $request->get('id');
+        $data = DB::table('setting')->where('id','=',$id)->first();
+        
+        return view('editset',['data'=>$data]);
+    }
+
+    public function updateset(Request $request){
+        $rq = $request->all();
+        $rq['add_time'] = time();
+        $res = DB::table('setting')->where('id',$rq['id'])->update($rq);
     }
 
     //换肤
