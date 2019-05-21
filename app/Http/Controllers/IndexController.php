@@ -44,9 +44,12 @@ class IndexController extends Controller
         $campuss = DB::table('campus')->get();
         $grades = DB::table('grade')->get();
         $bclasss = DB::table('bclass')->get();
+        $year = DB::table('syear')->get();
+        View()->share('year',$year);
         View()->share('campus',$campuss);
         View()->share('grade',$grades);
         View()->share('bclass',$bclasss);
+        View()->share('url','http://39.98.42.52:7082');
     }
 
     /**
@@ -379,8 +382,25 @@ class IndexController extends Controller
     // public function doombase3(){
     //     return view('doombase3');
     // }
-    public function tsgbase(){
-        return view('tsgbase');
+    public function tsgbase(request $request){
+
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        $time1 = '';
+        $time2 = '';
+        if(isset($years) && !empty($years)){
+            $time = DB::table('syear')->where(['sy_id'=>$years])->first();
+            $time1 = date('Y-m-d',$time->sy_stime);
+            $time2 = date('Y-m-d',$time->sy_etime);
+        }
+
+        $semester = $request->get('semester');
+        if(isset($semester) && !empty($semester)){
+            $time =  DB::table('semester')->where(['se_id'=>$semester])->first();
+            $time1 = date('Y-m-d',$time->se_stime);
+            $time2 = date('Y-m-d',$time->se_etime);
+        }
+        return view('tsgbase',['semesters'=>$semesters,'time1'=>$time1,'time2'=>$time2]);
     }
     public function tsgbase1(){
         return view('tsgbase1');
