@@ -65,8 +65,8 @@
     function read(){
         $.ajax({
             type: "get",
-            // url:"http://47.96.171.165:8019/api/index",
-            url:"http://127.0.0.1:8022/api/index",
+            url:"http://47.96.171.165:8019/api/index",
+            // url:"http://127.0.0.1:8022/api/index",
             data: {},
             dataType: "json",
             success: function(data){
