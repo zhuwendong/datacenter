@@ -14,17 +14,25 @@
         <a href="/stufee2"><span class="tab-item">欠费统计</span></a>
         <a href="/stufee3"><span class="tab-item">收费统计</span></a>
     </div>
-    <div class=''>
+    <form>
+    <div style="margin-top: 20px;padding-left: 10px;">
         <label for="">学年：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select id="syear" class='ipt ipt-xs' name="year" id="">
             <option value="">请选择</option>
+            @foreach ($year as $vo)
+            <option @isset($_REQUEST["year"]) @if ($_REQUEST["year"] == $vo->sy_id) selected @endif @endisset value="{{ $vo->sy_id }}">{{ $vo->sy_name }}</option>
+            @endforeach
         </select>
         <label for="">学期：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select id="semester" class='ipt ipt-xs' name="semester" id="">
             <option value="">请选择</option>
+            @foreach ($semesters as $vo)
+            <option @isset($_REQUEST["semester"]) @if ($_REQUEST["semester"] == $vo->se_id) selected @endif @endisset value="{{ $vo->se_id }}">@if ($vo->se_cid == 1)第一学期 @else第二学期@endif</option>
+            @endforeach
         </select>
-        <button class="btn btn-info">查询</button>
+        <button type="submit" class="btn btn-info">查询</button>
     </div>
+    </form>
     <div class='title-box'>
         <span class='icon-student'></span>
         <span>学生人数：</span>
@@ -91,5 +99,32 @@
     $('#tj').change(function(){
         window.location.href="/stufee4";
     })
+</script>
+<script>
+    //ajax获取学期
+	$("select#syear").change(function(){
+	    var semester=document.getElementById('semester');
+        var id=$("#syear option:selected").val();
+        $.ajax({
+          url:"/getsemester",
+          data:{id:id},
+          async:false,
+          success:function(res) {
+			//  console.log(res.data);
+            $("#semester").empty();
+            semester.options.add(new Option("请选择",' '));
+            $.each(res.data, function(i, item){     
+            if(item.se_cid == 1){
+                    // semester.append('<option value='"+item.se_id+"'>第一学期</option>');
+                semester.options.add(new Option("第一学期",item.se_id)); 
+                }else{
+                    // semester.append('<option value='"+item.se_id+"'>第二学期</option>');
+                semester.options.add(new Option("第二学期",item.se_id)); 
+                }
+            });
+            console.log(semester);
+          }
+        }) 
+	})
 </script>
 @endsection

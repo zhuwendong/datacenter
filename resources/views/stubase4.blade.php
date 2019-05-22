@@ -24,14 +24,14 @@
             @endforeach
         </select>
         <label for="">年级：</label>
-        <select class='ipt ipt-xs' name="grade" id="">
+        <select class='ipt ipt-xs' name="grade" id="grade">
             <option value="">请选择</option>
             @foreach ($grade as $vo)
             <option @isset($_REQUEST["grade"]) @if ($_REQUEST["grade"] == $vo->gd_id) selected @endif @endisset value="{{ $vo->gd_id }}">{{ $vo->gd_name }}</option>
             @endforeach
         </select>
         <label for="">班级：</label>
-        <select class='ipt ipt-xs' name="class" id="">
+        <select class='ipt ipt-xs' name="class" id="class">
             <option value="">请选择</option>
             @foreach ($bclass as $vo)
             <option @isset($_REQUEST["class"]) @if ($_REQUEST["class"] == $vo->cl_id) selected @endif @endisset value="{{ $vo->cl_id }}">{{ $vo->cl_name }}</option>
@@ -43,7 +43,7 @@
     <div class='title-box'>
         <span class='icon-student'></span>
         <span>学生人数：</span>
-        <span>5000</span>
+        <span>{{ $count }}</span>
     </div>
     <div style='margin:15px 0;' class='select-box'>
         <select id="tj" class='ipt ipt-xs' name="" id="">
@@ -112,5 +112,24 @@
     $('#tj').change(function(){
         window.location.href="/stubase2";
     })
+</script>
+<script>
+//ajax获取班级
+$("select#grade").change(function(){
+    var classs=document.getElementById('class');
+    var id=$("#grade option:selected").val();
+    $.ajax({
+        url:"/getclass",
+        data:{id:id},
+        async:false,
+        success:function(res) {
+            $("#class").empty();
+            classs.options.add(new Option("请选择",' '));
+            $.each(res.data, function(i, item){
+                classs.options.add(new Option(item.cl_name,item.cl_id)); 
+            })
+        }
+    })
+})
 </script>
 @endsection

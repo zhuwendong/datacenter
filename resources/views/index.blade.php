@@ -112,12 +112,16 @@
         title:"教师/学生籍贯分布",
         data:data
     });
-
+    var time = new Array();
+    @foreach($ykt_time as $value){
+        time.push('{{ $value }}');
+    }
+    @endforeach
     Charts.getLine({
         dom: ".charts-4",
         title: "一卡通近7日消费额",
         yValue:"金额：万元",
-        xData: ['11/7', '11/8', '11/9', '11/10', '11/11', '11/12', '11/13'],
+        xData: time,
         legend: ['消费额'],
         yData: [{
             name: '消费额',
@@ -133,29 +137,27 @@
             data: [2500, 4600, 3100, 2400, 4700, 4100, 2700],
         }], 
     });
-
+    var data = new Array();
+    var data1 = new Array();
+    @foreach ($data as $value)
+       data.push('{{ $value->name }}');
+       data1.push({
+            value: {{ $value->count }},
+            name: '{{ $value->name }}',
+        });
+    @endforeach
     Charts.getQpie({
         dom:".charts-5",
         h1:400,
         h2:400,
         title:"分类及金融占比",
-        legend:['电器类','日常消耗品','办公用品类','电器类金额占比','日常消耗品金额占比','办公用品类金额占比'],
-        data1:[
-            {value:335, name:'电器类'},
-            {value:310, name:'日常消耗品'},
-            {value:234, name:'办公用品类'},
-        ],
-        data2:[{
-            value: 5425,
-            name: '电器类金额占比',
-        },
-        {
-            value: 3100,
-            name: '日常消耗品金额占比',
-        }, {
-            value: 1800,
-            name: '办公用品类金额占比',
-        }]
+        legend:data,
+        // data1:[
+        //     {value:335, name:'电器类'},
+        //     {value:310, name:'日常消耗品'},
+        //     {value:234, name:'办公用品类'},
+        // ],
+        data2:data1
     });
 
     Charts.getBar({

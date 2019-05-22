@@ -15,15 +15,23 @@
         <a href="/teacherbase3"><span class="tab-item">职业统计</span></a>
     </div>
     <div class=''>
+        <form>
         <label for="">校区：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' name="campus" id="">
             <option value="">请选择</option>
+            @foreach ($campus as $vo)
+            <option @isset($_REQUEST["campus"]) @if ($_REQUEST["campus"] == $vo->cp_id) selected @endif @endisset value="{{ $vo->cp_id }}">{{ $vo->cp_name }}</option>
+            @endforeach
         </select>
         <label for="">机构：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' name="orgniza" id="">
             <option value="">请选择</option>
+            @foreach($orgniza as $vo)
+            <option @isset($_REQUEST["orgniza"]) @if ($_REQUEST["orgniza"] == $vo->og_id) selected @endif @endisset value="{{ $vo->og_id }}">{{ $vo->og_name }}</option>
+            @endforeach
         </select>
         <button class="btn btn-info">查询</button>
+        </form>
     </div>
     <div class='title-box'>
         <span class='icon-student'></span>

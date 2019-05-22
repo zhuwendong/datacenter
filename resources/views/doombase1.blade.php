@@ -13,13 +13,18 @@
         <a href="/doombase1"><span class="tab-item on">出入分时段</span></a>
         <a href="/doombase2"><span class="tab-item">宿舍分布</span></a>
     </div>
+    <form>
     <div class=''>
         <label for="">校区：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' name="campus" id="">
             <option value="">请选择</option>
+            @foreach ($campus as $vo)
+                <option @isset($_REQUEST["campus"]) @if ($_REQUEST["campus"] == 1) selected @endif @endisset value="{{ $vo->cp_id }}">{{ $vo->cp_name }}</option>
+            @endforeach
         </select>
-        <button class="btn btn-info">查询</button>
+        <button type="submit" class="btn btn-info">查询</button>
     </div>
+    </form>
     <hr/>
     <div class='charts-container clearfix'>
         <div style='width:100%' class='charts-1 p-l'>

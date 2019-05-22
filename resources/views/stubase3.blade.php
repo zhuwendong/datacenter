@@ -15,24 +15,35 @@
         <a href="/stubase3"><span class="tab-item on">调动统计</span></a>
     </div>
     <div class=''>
+        <form>
         <label for="">校区：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' name="campus" id="">
             <option value="">请选择</option>
+            @foreach ($campus as $vo)
+            <option value="{{ $vo->cp_id }}">{{ $vo->cp_name }}</option>
+            @endforeach
         </select>
         <label for="">年级：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' id="grade" name="grade" id="">
             <option value="">请选择</option>
+            @foreach ($grade as $vo)
+            <option value="{{ $vo->gd_id }}">{{ $vo->gd_name }}</option>
+            @endforeach
         </select>
         <label for="">班级：</label>
-        <select class='ipt ipt-xs' name="" id="">
+        <select class='ipt ipt-xs' id="class" name="class" id="">
             <option value="">请选择</option>
+            @foreach ($bclass as $vo)
+            <option value="{{ $vo->cl_id }}">{{ $vo->cl_name }}</option>
+            @endforeach
         </select>
         <button class="btn btn-info">查询</button>
+        </form>
     </div>
     <div class='title-box'>
         <span class='icon-student'></span>
         <span>学生人数：</span>
-        <span>5000</span>
+        <span>{{ $count }}</span>
     </div>
     <div style='margin:15px 0;' class='select-box'>
         <select id="tj" class='ipt ipt-xs' name="" id="">
@@ -105,4 +116,23 @@
             window.location.href="/stubase5";
         })
     </script>
+<script>
+//ajax获取班级
+$("select#grade").change(function(){
+    var classs=document.getElementById('class');
+    var id=$("#grade option:selected").val();
+    $.ajax({
+        url:"/getclass",
+        data:{id:id},
+        async:false,
+        success:function(res) {
+            $("#class").empty();
+            classs.options.add(new Option("请选择",' '));
+            $.each(res.data, function(i, item){
+                classs.options.add(new Option(item.cl_name,item.cl_id)); 
+            })
+        }
+    })
+})
+</script>
 @endsection

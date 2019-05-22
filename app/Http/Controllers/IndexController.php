@@ -45,10 +45,12 @@ class IndexController extends Controller
         $grades = DB::table('grade')->get();
         $bclasss = DB::table('bclass')->get();
         $year = DB::table('syear')->get();
+        $orgniza = DB::table('orgniza')->get();
         View()->share('year',$year);
         View()->share('campus',$campuss);
         View()->share('grade',$grades);
         View()->share('bclass',$bclasss);
+        View()->share('orgniza',$orgniza);
         View()->share('url','http://39.98.42.52:7082');
     }
 
@@ -93,10 +95,22 @@ class IndexController extends Controller
         //教师/学生籍贯分布
         $jiguan = DB::select('select count(*) as count,s_jiguan from bp_sxd_student_info group by s_jiguan');
         
+        //一卡通近7日消费额
+        $ykt_time = [date('m/d'),date('m/d',strtotime('-1 day')),date('m/d',strtotime('-2 day')),date('m/d',strtotime('-3 day')),date('m/d',strtotime('-4 day')),date('m/d',strtotime('-5 day')),date('m/d',strtotime('-6 day'))];
+        $ykt_time = array_reverse($ykt_time);
+        //分类占比
+        $data = DB::select('select * from bp_assets_classify where pid =0');
+        foreach($data as &$value){
+            $classify = DB::table('assets_classify')->where(['pid'=>$value->id])->pluck('id');
+            $classify = json_decode(json_encode($classify), true);
+            // var_dump($classify);
+            $pluck = DB::table('assets')->whereIn('assets_classify_id',$classify)->count();
+            $value->count = $pluck;
+        }
         //科目教师数量柱状图
         $teacher = DB::select('select `course`, `coursedetail`,count(`course`) as number from `bp_pk_coursedetail` group by `course` order by `course` asc');
         $teacher = json_decode(json_encode($teacher), true);
-
+     
         //各年级最近一场考试总分平均数柱状图
         $results = DB::table('grade')->get();
         $results = json_decode(json_encode($results), true);
@@ -106,7 +120,7 @@ class IndexController extends Controller
             $avg = Db::table('score')->whereIn('exam_id',$exam)->avg('score');
             $value['avg'] = round($avg,2);
         }
-        return view('index',['sex1'=>$sex1,'sex2'=>$sex2,'teacher'=>$teacher,'results'=>$results,'jiguan'=>$jiguan]);
+        return view('index',['sex1'=>$sex1,'sex2'=>$sex2,'teacher'=>$teacher,'results'=>$results,'jiguan'=>$jiguan,'ykt_time'=>$ykt_time,'data'=>$data]);
     }
 
     //学生基础分析
@@ -201,7 +215,11 @@ class IndexController extends Controller
                 $value->name = '已毕业';
             }
         }
-        return view('stubase2',['data'=>$data]);
+        $count  = DB::table('admin')->where([
+            ['ad_status','=',1],
+            ['rs_id','=',3]
+        ])->count();
+        return view('stubase2',['data'=>$data,'count'=>$count]);
     }
 
     public function stubase4(){
@@ -210,18 +228,30 @@ class IndexController extends Controller
             $ad_num = DB::table('admin')->where(['gd_id'=>$value->gd_id])->pluck('ad_num');
             $value->count = DB::table('sxd_reward')->whereIn('xuehao',$ad_num)->count();
         }
-        return view('stubase4',['data'=>$data]);
+        $count  = DB::table('admin')->where([
+            ['ad_status','=',1],
+            ['rs_id','=',3]
+        ])->count();
+        return view('stubase4',['data'=>$data,'count'=>$count]);
     }
 
-    public function stubase3(){
-        
-        return view('stubase3');
+    public function stubase3(Request $request){
+        $count  = DB::table('admin')->where([
+            ['ad_status','=',1],
+            ['rs_id','=',3]
+        ])->count();
+        return view('stubase3',['count'=>$count]);
     }
     
     public function stubase5(){
-        return view('stubase5');
+        $count  = DB::table('admin')->where([
+            ['ad_status','=',1],
+            ['rs_id','=',3]
+        ])->count();
+        return view('stubase5',['count'=>$count]);
     }
     public function teacherbase(){
+        
         return view('teacherbase');
     }
     public function teacherbase1(){
@@ -236,20 +266,30 @@ class IndexController extends Controller
     public function teacherbase4(){
         return view('teacherbase4');
     }
-    public function stufee(){
-        return view('stufee');
+    public function stufee(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        return view('stufee',['semesters'=>$semesters]);
     }
-    public function stufee1(){
-        return view('stufee1');
+    public function stufee1(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        return view('stufee1',['semesters'=>$semesters]);
     }
-    public function stufee2(){
-        return view('stufee2');
+    public function stufee2(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        return view('stufee2',['semesters'=>$semesters]);
     }
-    public function stufee3(){
-        return view('stufee3');
+    public function stufee3(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        return view('stufee3',['semesters'=>$semesters]);
     }
-    public function stufee4(){
-        return view('stufee4');
+    public function stufee4(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        return view('stufee4',['semesters'=>$semesters]);
     }
     public function zcbase(){
         //分类占比
@@ -523,6 +563,13 @@ class IndexController extends Controller
     public function getsemester(request $request){
         $id = $request->get('id');
         $data = DB::table('semester')->where(['sy_id'=>$id])->get();
+        return response()->json(['status'=>200,'data'=>$data])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+    }
+
+    //根据年级获取班级
+    public function getclass(request $request){
+        $id = $request->get('id');
+        $data = DB::table('bclass')->where(['gd_id'=>$id])->get();
         return response()->json(['status'=>200,'data'=>$data])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 }
