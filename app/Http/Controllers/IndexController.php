@@ -92,13 +92,17 @@ class IndexController extends Controller
             $count2 = DB::table('admin')->where($map)->count();
             $sex2[] = $count2;
         }
+        //借书类型及数量折线图
+        $borrow = $this->getHttpResult("http://39.98.42.52:7082/OPAC.ashx?op=getSubjectCategoryStatistics");
+
         //教师/学生籍贯分布
         $jiguan = DB::select('select count(*) as count,s_jiguan from bp_sxd_student_info group by s_jiguan');
         
         //一卡通近7日消费额
         $ykt_time = [date('m/d'),date('m/d',strtotime('-1 day')),date('m/d',strtotime('-2 day')),date('m/d',strtotime('-3 day')),date('m/d',strtotime('-4 day')),date('m/d',strtotime('-5 day')),date('m/d',strtotime('-6 day'))];
         $ykt_time = array_reverse($ykt_time);
-        //分类占比
+
+        //分类及金融占比
         $data = DB::select('select * from bp_assets_classify where pid =0');
         foreach($data as &$value){
             $classify = DB::table('assets_classify')->where(['pid'=>$value->id])->pluck('id');
@@ -107,6 +111,12 @@ class IndexController extends Controller
             $pluck = DB::table('assets')->whereIn('assets_classify_id',$classify)->count();
             $value->count = $pluck;
         }
+
+        //考勤时间段及打卡人数柱状图
+
+        //今日考勤时间段及打卡人数柱状图
+
+        
         //科目教师数量柱状图
         $teacher = DB::select('select `course`, `coursedetail`,count(`course`) as number from `bp_pk_coursedetail` group by `course` order by `course` asc');
         $teacher = json_decode(json_encode($teacher), true);
@@ -120,7 +130,7 @@ class IndexController extends Controller
             $avg = Db::table('score')->whereIn('exam_id',$exam)->avg('score');
             $value['avg'] = round($avg,2);
         }
-        return view('index',['sex1'=>$sex1,'sex2'=>$sex2,'teacher'=>$teacher,'results'=>$results,'jiguan'=>$jiguan,'ykt_time'=>$ykt_time,'data'=>$data]);
+        return view('index',['sex1'=>$sex1,'sex2'=>$sex2,'teacher'=>$teacher,'results'=>$results,'jiguan'=>$jiguan,'ykt_time'=>$ykt_time,'data'=>$data,'borrow'=>$borrow['list']]);
     }
 
     //学生基础分析
@@ -442,17 +452,78 @@ class IndexController extends Controller
         }
         return view('tsgbase',['semesters'=>$semesters,'time1'=>$time1,'time2'=>$time2]);
     }
-    public function tsgbase1(){
-        return view('tsgbase1');
+    public function tsgbase1(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        $time1 = '';
+        $time2 = '';
+        if(isset($years) && !empty($years)){
+            $time = DB::table('syear')->where(['sy_id'=>$years])->first();
+            $time1 = date('Y-m-d',$time->sy_stime);
+            $time2 = date('Y-m-d',$time->sy_etime);
+        }
+
+        $semester = $request->get('semester');
+        if(isset($semester) && !empty($semester)){
+            $time =  DB::table('semester')->where(['se_id'=>$semester])->first();
+            $time1 = date('Y-m-d',$time->se_stime);
+            $time2 = date('Y-m-d',$time->se_etime);
+        }
+        return view('tsgbase1',['semesters'=>$semesters,'time1'=>$time1,'time2'=>$time2]);
     }
-    public function tsgbase2(){
-        return view('tsgbase2');
+    public function tsgbase2(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        $time1 = '';
+        $time2 = '';
+        if(isset($years) && !empty($years)){
+            $time = DB::table('syear')->where(['sy_id'=>$years])->first();
+            $time1 = date('Y-m-d',$time->sy_stime);
+            $time2 = date('Y-m-d',$time->sy_etime);
+        }
+
+        $semester = $request->get('semester');
+        if(isset($semester) && !empty($semester)){
+            $time =  DB::table('semester')->where(['se_id'=>$semester])->first();
+            $time1 = date('Y-m-d',$time->se_stime);
+            $time2 = date('Y-m-d',$time->se_etime);
+        }
+        return view('tsgbase2',['semesters'=>$semesters,'time1'=>$time1,'time2'=>$time2]);
     }
-    public function tsgbase3(){
-        return view('tsgbase3');
+    public function tsgbase3(Request $request){
+        $years = $request->get('year');
+        $semesters = DB::table('semester')->where(['sy_id'=>$years])->get();
+        $time1 = '';
+        $time2 = '';
+        if(isset($years) && !empty($years)){
+            $time = DB::table('syear')->where(['sy_id'=>$years])->first();
+            $time1 = date('Y-m-d',$time->sy_stime);
+            $time2 = date('Y-m-d',$time->sy_etime);
+        }
+
+        $semester = $request->get('semester');
+        if(isset($semester) && !empty($semester)){
+            $time =  DB::table('semester')->where(['se_id'=>$semester])->first();
+            $time1 = date('Y-m-d',$time->se_stime);
+            $time2 = date('Y-m-d',$time->se_etime);
+        }
+        return view('tsgbase3',['semesters'=>$semesters,'time1'=>$time1,'time2'=>$time2]);
     }
-    public function ykt(){
-        return view('ykt');
+    public function ykt(Request $request){
+        $time1 = $request->get('time1');
+        $time2 = $request->get('time2');
+        if(empty($time1) || empty($time2)){
+            $time1 = date('Y-m-d',strtotime('-7 day'));
+            $time2 = date('Y-m-d');
+        }
+        $time11 = date('Y/m/d',strtotime($time1));
+        $time22 = date('Y/m/d',strtotime($time2));
+        $data = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={'cmd':'getkx_cw_liushui','pageSize':'10'}",$method = 'GET');
+        
+        $data1 = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={'cmd':'getCardTypeConsumStatistics'}",$method = 'GET');
+        
+        $data2 = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={'cmd':'getRoleConsumStatistics'}",$method = 'GET');
+        return view('ykt',['time1'=>$time1,'time2'=>$time2,'time11'=>$time11,'time22'=>$time22,'data'=>$data,'data1'=>$data1,'data2'=>$data2]);
     }
     public function kq(request $request){
         $orgniza = DB::table('orgniza')->get();

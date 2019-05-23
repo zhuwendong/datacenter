@@ -61,43 +61,34 @@
                 barWidth:"20"
             },]
     });
-    read();
-    function read(){
-        $.ajax({
-            type: "get",
-            url:"http://47.96.171.165:8019/api/index",
-            // url:"http://127.0.0.1:8022/api/index",
-            data: {},
-            dataType: "json",
-            success: function(data){
-                if(data.status == '200'){
-                    Charts.getLine({
-                        dom: ".charts-2",
-                        title: "借书类型及数量折线图",
-                        yValue:"(数量：本)",
-                        xData: ['人物', '历史', '文学', '教育', '科学', '其他'],
-                        legend: ['数量'],
-                        yData: [{
-                            name: '数量',
-                            type: 'line',
-                            itemStyle: {
-                                normal: {
-                                    color: '#ff0000',	// 折点自定义颜色
-                                    lineStyle: {
-                                        color: '#ff0000',	// 折线自定义颜色
-                                    }
-                                }
-                            },
-                            data: data.data,
-                        }], 
-                    });
-                }else{
-                    
+
+    var arr1 = new Array();
+    var arr2 = new Array();
+    @foreach ($borrow as $vo)
+        arr1.push('{{$vo['学科类目']}}');
+        arr2.push('{{$vo['册数']}}');
+    @endforeach
+    Charts.getLine({
+        dom: ".charts-2",
+        title: "借书类型及数量折线图",
+        yValue:"(数量：本)",
+        xData: arr1,
+        legend: ['数量'],
+        yData: [{
+            name: '数量',
+            type: 'line',
+            itemStyle: {
+                normal: {
+                    color: '#ff0000',	// 折点自定义颜色
+                    lineStyle: {
+                        color: '#ff0000',	// 折线自定义颜色
+                    }
                 }
-            }
-        });
-    }
-    
+            },
+            data: arr2,
+        }], 
+    });
+
     var data = new Array();
     @foreach ($jiguan as $value)
     data.push({
@@ -134,7 +125,7 @@
                     }
                 }
             },
-            data: [2500, 4600, 3100, 2400, 4700, 4100, 2700],
+            data: [0, 0, 0, 0, 0, 0, 0],
         }], 
     });
     var data = new Array();

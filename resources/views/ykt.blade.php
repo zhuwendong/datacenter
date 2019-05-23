@@ -8,10 +8,14 @@
         <span>></span>
         <span><a href="javascript:;">一卡通消费分析</a></span>
     </div> 
-    <hr/>  
+    <hr/>
+    <form>  
     <div style='margin:15px 0;' class='select-box'>
-        <input type="text" class="layui-input" id="test1" placeholder="请选择时间" style="width: 250px; display: inline-block;">
-    </div> 
+        <input type="text" class="layui-input" name="time1" value="{{ $time1 }}" id="test1" placeholder="请选择时间" style="width: 250px; display: inline-block;">
+        <input type="text" class="layui-input" name="time2" value="{{ $time2 }}" id="test2" placeholder="请选择时间" style="width: 250px; display: inline-block;">
+        <button type="submit" class="btn btn-info">查询</button>
+    </div>
+    </form> 
     <div class="flex-container">
         <div class="flex-items">
             <div class="flex-title">
@@ -20,21 +24,21 @@
             </div>
             <div class="flex-content">
                 <div class="time">
-                    <span><a href="javascript:;">2018/11/6-2019/2/21</a></span>
-                    <span>今日</span>
+                    <span><a href="javascript:;">{{$time11}}-{{$time22}}</a></span>
+                    <!-- <span>今日</span> -->
                 </div>
                 <div class="count">
-                    <span>20,000</span>
+                    <span>{{$data['total']}}</span>
                     <span>次</span>
                 </div>
-                <div class="float">
+                <!-- <div class="float">
                     <span>环比</span>
                     <span class="glyphicon glyphicon-arrow-down"></span>
                     <span>50.72%</span>
                     <span>同比</span>
                     <span class="glyphicon glyphicon-arrow-up"></span>
                     <span>25.19%</span>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="flex-items">
@@ -44,21 +48,21 @@
             </div>
             <div class="flex-content">
                 <div class="time">
-                    <span><a href="javascript:;">2018/11/6-2019/2/21</a></span>
-                    <span>今日</span>
+                    <span><a href="javascript:;">{{$time11}}-{{$time22}}</a></span>
+                    <!-- <span>今日</span> -->
                 </div>
                 <div class="count">
-                    <span>1,907</span>
+                    <span>{{$data['number']}}</span>
                     <span>人</span>
                 </div>
-                <div class="float">
+                <!-- <div class="float">
                     <span>环比</span>
                     <span class="glyphicon glyphicon-arrow-down"></span>
                     <span>50.72%</span>
                     <span>同比</span>
                     <span class="glyphicon glyphicon-arrow-up"></span>
                     <span>25.19%</span>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="flex-items">
@@ -69,20 +73,20 @@
             <div class="flex-content">
                 <div class="time">
                     <span><a href="javascript:;">2018/11/6-2019/2/21</a></span>
-                    <span>今日</span>
+                    <!-- <span>今日</span> -->
                 </div>
                 <div class="count">
-                    <span>5,900,004</span>
+                    <span>{{ $data['summoney'] }}</span>
                     <span>元</span>
                 </div>
-                <div class="float">
+                <!-- <div class="float">
                     <span>环比</span>
                     <span class="glyphicon glyphicon-arrow-down"></span>
                     <span>50.72%</span>
                     <span>同比</span>
                     <span class="glyphicon glyphicon-arrow-up"></span>
                     <span>25.19%</span>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="flex-items">
@@ -93,20 +97,20 @@
             <div class="flex-content">
                 <div class="time">
                     <span><a href="javascript:;">2018/11/6-2019/2/21</a></span>
-                    <span>今日</span>
+                    <!-- <span>今日</span> -->
                 </div>
                 <div class="count">
-                    <span>2,300</span>
+                    <span>@if(!empty($data['number'])){{ round($data['summoney']/$data['number']) }}@endif</span>
                     <span>元</span>
                 </div>
-                <div class="float">
+                <!-- <div class="float">
                     <span>环比</span>
                     <span class="glyphicon glyphicon-arrow-down"></span>
                     <span>50.72%</span>
                     <span>同比</span>
                     <span class="glyphicon glyphicon-arrow-up"></span>
                     <span>25.19%</span>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -225,6 +229,9 @@
 		laydate.render({
 			elem: '#test1'
 		});
+        laydate.render({
+			elem: '#test2'
+		});
 	});
 	var Charts = new Charts();
 	Charts.getLine({
@@ -276,12 +283,12 @@
         xData:['长期卡','临时卡'],
         height:400,
         data:[{
-                value: 54,
+                value: {{$data1['长期卡消费次数']}},
                 name: '长期卡',
                 selected: true
             },
             {
-                value: 46,
+                value: {{$data1['临时卡消费次数']}},
                 name: '临时卡',
                 selected: true
             }]
@@ -293,12 +300,12 @@
         xData:['长期卡','临时卡'],
         height:400,
         data:[{
-                value: 54,
+                value: {{$data1['长期卡消费额']}},
                 name: '长期卡',
                 selected: true
             },
             {
-                value: 46,
+                value: {{$data1['临时卡消费额']}},
                 name: '临时卡',
                 selected: true
             }]
