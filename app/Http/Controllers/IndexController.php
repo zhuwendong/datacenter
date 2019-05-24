@@ -11,6 +11,7 @@ class IndexController extends Controller
         $ssoCheckUrl = config('api.sso.ssoCheck');
         $token = Cookie::get('token');
         $ssoData['token'] = $token;
+        var_dump($token);
         $data = $this->getHttpResult($ssoCheckUrl ,$method = 'POST', $ssoData);
         if($data['code'] == 1){
             $ssoOfData = $data['data'];
