@@ -100,7 +100,7 @@
                     <!-- <span>今日</span> -->
                 </div>
                 <div class="count">
-                    <span>@if(!empty($data['number'])){{ round($data['summoney']/$data['number']) }}@endif</span>
+                    <span>@if(!empty($data['number'])){{ round($data['summoney']/$data['number']) }} @else 0 @endif</span>
                     <span>元</span>
                 </div>
                 <!-- <div class="float">
@@ -117,13 +117,13 @@
     <div class='charts-container clearfix'>
         <div style='width:50%;position: relative;' class='charts-1 p-l'>
             <div style="position: absolute;top: 80px; left: 50px;">
-                <strong>2018/11/6-2019/2/21</strong>
+                <strong>{{$time11}}-{{$time22}}</strong>
             </div>
         </div>
         <div style='width:48%;position: relative;' class='charts-2 p-r'>
             <div style="position: absolute;top: 80px; left: 50px;">
-                <strong>2018/11/6-2019/2/21</strong>
-                <div class="count" style="padding: 20px;">
+                <strong>{{$time11}}-{{$time22}}</strong>
+                <!-- <div class="count" style="padding: 20px;">
                     <span>20.05</span>	
                     <span>万元</span>	
                     <div style="display: inline-block; margin-left: 20px;">
@@ -140,19 +140,19 @@
                         <span>均值</span>
                         <span>12.6万元</span>
                     </div>		
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
     <div class='charts-container clearfix'>
         <div style='width:50%;position: relative;' class='charts-3 p-l'>
             <div style="position: absolute;top: 100px; left: 50px;">
-                <strong>2018/11/6-2019/2/21</strong>
+                <strong>{{$time11}}-{{$time22}}</strong>
             </div>
         </div>
         <div style='width:48%;position: relative;' class='charts-4 p-r'>
             <div style="position: absolute;top: 100px; left: 50px;">
-                <strong>2018/11/6-2019/2/21</strong>
+                <strong>{{$time11}}-{{$time22}}</strong>
             </div>
         </div>
     </div>
@@ -164,24 +164,26 @@
             </div>
             <div class="flex-content">
                 <div class="time">
-                    <strong>2018/11/6-2019/2/21</strong>
+                    <strong>{{$time11}}-{{$time22}}</strong>
                 </div>
-                <div class="title">
-                    <span></span>
-                    <strong>学生</strong>
-                </div>
-                <div class="count">
-                    <span>1205</span>
-                    <strong>次</strong>
-                </div>
-                <div class="title">
+                @foreach($data2 as $val)
+                   <div class="title">
+                        <span></span>
+                        <strong>{{$val['角色名称']}}</strong>
+                    </div>
+                    <div class="count">
+                        <span>{{$val['消费次数']}}</span>
+                        <strong>次</strong>
+                    </div>
+                @endforeach
+                <!-- <div class="title">
                     <span style="background: #F34334;"></span>
                     <strong>教师</strong>
                 </div>
                 <div class="count">
                     <span>1000</span>
                     <strong>次</strong>
-                </div>
+                </div> -->
                 <div id="eChartsId-1" style="height: 300px; width: 100%;"></div>
             </div>
         </div>	
@@ -192,28 +194,28 @@
             </div>
             <div class="flex-content">
                 <div class="time">
-                    <strong>2018/11/6-2019/2/21</strong>
+                    <strong>{{$time11}}-{{$time22}}</strong>
                 </div>
-                <div class="title">
+                <!-- <div class="title">
                     <span></span>
                     <strong>学生</strong>
                 </div>
                 <div class="count">
                     <span>20.05</span>
                     <strong>万元</strong>
-                    <span>合计：120.7万元</span>
-                    <span>均值：12.6万元</span>
-                </div>
+                </div> -->
+                @foreach($data2 as $val)
                 <div class="title">
                     <span style="background: #F34334;"></span>
-                    <strong>教师</strong>
+                    <strong>{{$val['角色名称']}}</strong>
                 </div>
                 <div class="count">
-                    <span>33.00</span>
+                    <span>{{$val['消费额']}}</span>
                     <strong>万元</strong>
-                    <span>合计：120.7万元</span>
-                    <span>均值：12.6万元</span>
+                    <!-- <span>合计：120.7万元</span>
+                    <span>均值：12.6万元</span> -->
                 </div>
+                @endforeach
                 <div id="eChartsId-2" style="height: 300px; width: 100%;"></div>
             </div>
         </div>
@@ -234,6 +236,19 @@
 		});
 	});
 	var Charts = new Charts();
+    var arr1 = new Array();
+    var arr2 = new Array();
+    var arr3 = new Array();
+    var arr4 = new Array();
+    @foreach($data3 as $val){
+        arr1.push('{{$val['time']}}');
+        arr2.push({{$val['total']}});
+        arr3.push({{$val['number']}});
+        arr4.push({{$val['summoney']}});
+    }
+
+    @endforeach
+
 	Charts.getLine({
         dom:".charts-1",
         title:"近七日消费概况-1",
@@ -241,20 +256,20 @@
         h2:380,
         legend:['消费次数','消费人数'],
         yValue: ' ',
-        xData:['11/7','11/8','11/9','11/10','11/11','11/12','11/13'],
+        xData:arr1,
         yData:[       
                 {
                     name:'消费次数',
                     type:'line',
                     smooth: false,
-                    data:[220, 182, 191, 234, 290, 330, 310]
+                    data:arr2
                 },
                 {
                     name:'消费人数',
                     type:'line',
                     symbol:'rect',
                     smooth: false,
-                    data:[150, 232, 201, 154, 190, 330, 410],
+                    data:arr3,
                 },
             ]
     });
@@ -266,13 +281,13 @@
         gridTop: '150px', 
         yValue: ' ',
         legend:['消费额'],
-        xData:['11/7','11/8','11/9','11/10','11/11','11/12','11/13'],
+        xData:arr1,
         yData:[       
                 {
                     name:'消费额',
                     type:'line',
                     smooth: false,
-                    data:[220, 182, 191, 234, 290, 330, 310]
+                    data:arr4
                 },
             ]
     });
@@ -313,6 +328,26 @@
 
     var eChartsA = echarts.init(document.getElementById('eChartsId-1'));
     var eChartsB = echarts.init(document.getElementById('eChartsId-2'));
+    var data = new Array();
+    var data1 = new Array();
+    var data2 = new Array();
+    @foreach($data2[0]['rows'] as $val)
+    data.push('{{$val['vlues']['date']}}');
+    data1.push('{{$val['vlues']['number']}}');
+    @endforeach
+    @foreach($data2[1]['rows'] as $val)
+    data2.push('{{$val['vlues']['number']}}');
+    @endforeach
+
+    var data3 = new Array();
+    var data4 = new Array();
+    @foreach($data2[0]['rows'] as $val)
+    data3.push('{{$val['vlues']['money']}}');
+    @endforeach
+    @foreach($data2[1]['rows'] as $val)
+    data4.push('{{$val['vlues']['money']}}');
+    @endforeach
+
     var option = {
 		tooltip : {
 		    trigger: 'axis',
@@ -334,7 +369,7 @@
 	    xAxis : [
 	        {
 	            type : 'category',
-	            data : ['11/7','11/8','11/9','11/10','11/11','11/12','11/13']
+	            data : data
 	        }
 	    ],
 	    yAxis : [
@@ -346,17 +381,60 @@
             name: '学生',
             type: 'bar',
             stack: '人数',
-            data: [2400, 2500, 3100, 3400, 3100,2300,2200],
+            data: data1,
             barWidth:'20',     
         }, {
             name: '教师',
             type: 'bar',
             stack: '人数',
-            data: [2800, 2000, 2500, 3200, 2300,2400, 3800],
+            data: data2,
+            barWidth:"20"
+        },]
+    };
+    var option1 = {
+		tooltip : {
+		    trigger: 'axis',
+		    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		    }
+	    },
+	    legend: {
+	        data:['学生','教师'],
+	        bottom: '0',
+	    },
+	    color: ['#438AFE', '#F34334'],
+	    grid: {
+	        left: '3%',
+	        right: '4%',
+	        bottom: '10%',
+	        containLabel: true
+	    },
+	    xAxis : [
+	        {
+	            type : 'category',
+	            data : data
+	        }
+	    ],
+	    yAxis : [
+	        {
+	            type : 'value'
+	        }
+	    ],
+	    series: [{
+            name: '学生',
+            type: 'bar',
+            stack: '人数',
+            data: data3,
+            barWidth:'20',     
+        }, {
+            name: '教师',
+            type: 'bar',
+            stack: '人数',
+            data: data4,
             barWidth:"20"
         },]
     };
     eChartsA.setOption(option);
-    eChartsB.setOption(option);
+    eChartsB.setOption(option1);
 </script>
 @endsection

@@ -518,12 +518,45 @@ class IndexController extends Controller
         }
         $time11 = date('Y/m/d',strtotime($time1));
         $time22 = date('Y/m/d',strtotime($time2));
-        $data = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={'cmd':'getkx_cw_liushui','pageSize':'10'}",$method = 'GET');
+        //http://39.98.42.52:7083/getInfo.ashx?str={'cmd':'getkx_cw_liushui','pageSize':'10','BeginDate':'2018-11-15', 'EndDate':'2018-11-17' ,'LeiXing':'1' }
+        $url = "http://39.98.42.52:7083/getInfo.ashx?str={%27cmd%27:%27getkx_cw_liushui%27,%27pageSize%27:%2710%27,%27BeginDate%27:%27".$time1."%27,%20%27EndDate%27:%27".$time2."%27%20,%27LeiXing%27:%271%27%20}";
+        $data = $this->getHttpResult($url,$method = 'GET');
+        if($data['code'] == -1){
+            $data = ['total'=>0,'number'=>0,'summoney'=>0];
+        }
+        $data3 = [];
+        $time = [date('Y/m/d',strtotime('-6 day')),date('Y/m/d',strtotime('-5 day')),date('Y/m/d',strtotime('-4 day')),date('Y/m/d',strtotime('-3 day')),date('Y/m/d',strtotime('-2 day')),date('Y/m/d',strtotime('-1 day')),date('Y/m/d')];
+        foreach($time as $key => $value){
+            $data3[$key]['time'] = date('m/d',strtotime($value));
+            $tm = date('Y/m/d',strtotime($value)+86400);
+            $dt = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={%27cmd%27:%27getkx_cw_liushui%27,%27pageSize%27:%271%27,%27BeginDate%27:%27".$value."%27,%20%27EndDate%27:%27".$tm."%27%20,%27LeiXing%27:%271%27%20}",$method = 'GET');
+            if($dt['code'] == -1){
+                $data3[$key]['total'] = 0;
+                $data3[$key]['number'] = 0;
+                $data3[$key]['summoney'] = 0;
+            }else{
+                $data3[$key]['total'] = $dt['total'];
+                $data3[$key]['number'] = $dt['number'];
+                $data3[$key]['summoney'] = $dt['summoney'];
+            }
+        }
+
+        $data1 = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={%27cmd%27:%27getCardTypeConsumStatistics%27%20,%27BeginDate%27:%27".$time1."%27,%20%27EndDate%27:%27".$time2."%27,%27LeiXing%27:%271%27}",$method = 'GET');
+        if($data1['长期卡消费额'] == null){
+            $data1['长期卡消费额'] = 0;
+        }
+
+        // var_dump($time11);exit;
+        $data2 = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={%27cmd%27:%27getRoleConsumStatistics%27,%27pageSize%27:%2710%27,%27BeginDate%27:%27".$time1."%27,%20%27EndDate%27:%27".$time2."%27%20,%27LeiXing%27:%271%27%20}",$method = 'GET');
+        $dt = $data2['rows'];
+        $data5=[];
+        foreach($dt as &$val){
+            if($val['角色名称'] =='教师' || $val['角色名称'] =='学生'){
+                $data5[] = $val;
+            }
+        }
         
-        $data1 = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={'cmd':'getCardTypeConsumStatistics'}",$method = 'GET');
-        
-        $data2 = $this->getHttpResult("http://39.98.42.52:7083/getInfo.ashx?str={'cmd':'getRoleConsumStatistics'}",$method = 'GET');
-        return view('ykt',['time1'=>$time1,'time2'=>$time2,'time11'=>$time11,'time22'=>$time22,'data'=>$data,'data1'=>$data1,'data2'=>$data2]);
+        return view('ykt',['time1'=>$time1,'time2'=>$time2,'time11'=>$time11,'time22'=>$time22,'data'=>$data,'data1'=>$data1,'data2'=>$data5,'data3'=>$data3]);
     }
     public function kq(request $request){
         $orgniza = DB::table('orgniza')->get();
