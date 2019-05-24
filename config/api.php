@@ -12,7 +12,7 @@ return [
         //'jzg_url' =>'http://47.96.171.165:8007',
         'jzg_url' =>'http://127.0.0.1:8007',
 
-        //基础地址
+        //基础地址1
         'ssoBase' => 'http://47.96.171.165:8007/ssoCheck',
         // 'ssoBase' => 'http://127.0.0.1:8007/ssoCheck',
 
