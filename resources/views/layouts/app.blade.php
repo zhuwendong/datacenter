@@ -38,6 +38,15 @@
 		left:46px;
 		color:#333;
 	}
+	.item-icon{
+        height: 16px;
+        width: 16px;
+        /* background: url(../images/oa.png) no-repeat center; */
+        background-size:100% 100%;
+        display:inline-block;
+        vertical-align: middle;
+        margin-right: 6px;
+    }
 	</style>
     <title>Document</title>
     @yield('header')
@@ -52,7 +61,7 @@
 	                <span class='icon-menu'></span>
 	                <ul class='menu-child-list hide'>
                         @foreach($sonList as $k=>$v)
-                            <li><a href="{{$v['sd_url']}}">{{$v['sd_name']}}</a></li>
+                            <li><span class="item-icon" style="background: url(/icon/{{$v['icon']}}) no-repeat center;"></span><a href="{{$v['sd_url']}}">{{$v['sd_name']}}</a></li>
                         @endforeach
                     </ul>
 	            </div>

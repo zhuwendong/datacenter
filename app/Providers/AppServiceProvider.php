@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
         //
         $info = DB::table('sysmodule')
             ->where(['sd_pid'=>0,'sd_type'=>1])
-            ->select('sd_id','sd_name','sd_url')->orderBy('sd_sort','asc')->orderBy('sd_id','asc')->get();
+            ->select('sd_id','sd_name','sd_url','icon')->orderBy('sd_sort','asc')->orderBy('sd_id','asc')->get();
         $sonList = json_decode(json_encode($info), true);
         View::share('sonList', $sonList);
     }
