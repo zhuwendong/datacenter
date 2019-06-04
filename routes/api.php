@@ -20,6 +20,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['namespace' => 'Api'], function(){
     Route::any('class','IndexController@bclass');
     Route::any('index','IndexController@index');
-    Route::any('subjectTeacher','IndexController@subjectTeacher');
-    Route::any('avg','IndexController@avg');
+    Route::any('teacherbd','IndexController@teacherbd');
+    Route::any('parentbd','IndexController@parentbd');
+    Route::any('account','IndexController@account');
+    Route::any('unbd','IndexController@unbd');
+    Route::any('notice','IndexController@notice');
+    Route::any('subject','IndexController@subject');
+    Route::any('getTeacherBysub','IndexController@getTeacherBysub');
+    Route::any('teachdetail','IndexController@teachdetail');
+    Route::any('chargeproject','IndexController@chargeproject');
+    Route::any('chargestardard','IndexController@chargestardard');
 });  //路由路径Controllers/Api/IndexController/index

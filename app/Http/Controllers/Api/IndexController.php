@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Admin as AdminModel;
 class IndexController extends Controller
 {
 
@@ -19,41 +20,127 @@ class IndexController extends Controller
         return response()->json(['status'=>200,'data'=>$data])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
+
     //年级人数分布柱状图
     public function index(){
-        return response()->json(['status'=>200,'data'=>[128, 25, 38, 24, 35, 26]])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
-        // $grade = DB::table('grade')->select('gd_id','gd_name')->get();
-        // $grade = json_decode(json_encode($grade), true);
-        // $sex = [];
-        // foreach($grade as $key => $value){
-        //     $map['gd_id'] = $value['gd_id'];
-        //     $map['ad_sex'] = 1;
-        //     $dt['sex1'] = DB::table('admin')->where($map)->count();
-        //     $map['ad_sex'] = 2;
-        //     $dt['sex2'] = DB::table('admin')->where($map)->count();
-        //     $grade[$key]['sex'] = $dt;
-        // }
-        // return response()->json(['status'=>200,'data'=>$grade])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
-    }
-    
-    //科目教师数量柱状图
-    public function subjectTeacher(){
-        $results = DB::select('select `course`, `coursedetail`,count(`course`) as number from `bp_pk_coursedetail` group by `course` order by `course` asc');
-        $results = json_decode(json_encode($results), true);
-        return response()->json(['status'=>200,'data'=>$results])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        $data = AdminModel::first();
+        var_dump($data);
+        // return response()->json(['status'=>200,'data'=>[128, 25, 38, 24, 35, 26]])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
-    //各年级最近一场考试总分平均数柱状图
-    public function avg(){
-        $results = DB::table('grade')->get();
-        $results = json_decode(json_encode($results), true);
-        foreach($results as &$value){
-            $exam = DB::table('exam')->where(['gd_id'=>$value['gd_id']])->pluck('id');
-            $exam = json_decode(json_encode($exam), true);
-            $avg = Db::table('score')->whereIn('exam_id',$exam)->avg('score');
-            $value['avg'] = round($avg,2);
-        }
-        return response()->json(['status'=>200,'data'=>$results])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+
+    //返回数据
+    public function _return($str){
+        return response()->json($str)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
+
+    
+
+    //微信公众号绑定
+    public function teacherbd(Request $request){
+        $ad_num = $request->get('ad_num');
+        $ad_pass = $request->get('ad_pass');
+        $open_id = $request->get('open_id');
+        $res = DB::table('admin')->where(['ad_num'=>$ad_num])->first();
+        if($res){
+            if(_md5($ad_pass) != $res->ad_pass){
+                return $this->_return(['status'=>-200,'data'=>'密码错误']);
+            }
+            $r = DB::table('admin')->where(['ad_uid'=>$res->ad_uid])->update(['openid'=>$open_id]);
+            if($r){
+                return $this->_return(['status'=>200,'data'=>'保存成功']);
+            }else{
+                return $this->_return(['status'=>-200,'data'=>'保存失败']);
+            }
+        }else{
+            return $this->_return(['status'=>-200,'data'=>'账号错误']);
+        }
+        
+    }
+
+    //家长绑定
+    public function parentbd(Request $request){
+        $ad_tel = $request->get('phone');
+        $open_id = $request->get('open_id');
+        $result = DB::table('admin')->where(['ad_tel'=>$ad_tel])->first();
+        if($result){
+            $r = DB::table('admin')->where(['ad_uid'=>$result->ad_uid])->update(['openid'=>$open_id]);
+            if($r){
+                return $this->_return(['status'=>200,'data'=>'保存成功']);
+            }else{
+                return $this->_return(['status'=>-200,'data'=>'保存失败']);
+            }
+        }else{
+            return $this->_return(['status'=>-200,'data'=>'账号错误']);
+        }
+    }
+
+    //账号信息
+    public function account(Request $request){
+        $open_id = $request->get('open_id');
+        $result = DB::table('admin')->where(['openid'=>$open_id])->first();
+        if($result){
+            return $this->_return(['status'=>200,'data'=>$result]);
+        }else{
+            return $this->_return(['status'=>-200,'data'=>'查无数据']);
+        }
+    }
+
+    //解绑
+    public function unbd(request $request){
+        $uid = $request->get('ad_uid');
+        $result = DB::table('admin')->where(['ad_uid'=>$uid])->update(['openid'=>'']);
+        if($result){
+            return $this->_return(['status'=>200,'data'=>'解绑成功']);
+        }else{
+            return $this->_return(['status'=>-200,'data'=>'解绑成功']);
+        }
+    }
+    
+    //通知公告
+    public function notice(){
+        $data = DB::table('notice')->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //学科
+    public function subject(){
+        $data = DB::table('subject')->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //根据学科获取教师
+    public function getTeacherBysub(request $request){
+        $subject = $request->get('sub_name');
+        $data = DB::table('jzg_subject_teacher')->where(['sub_name'=>$subject])->get();
+        return $this->_return(['status'=>200,'data'=>$data]); 
+    }
+
+    //教师详情
+    public function teachdetail(request $request){
+        $id = $request->get('id');
+        $data = DB::table('jzg_teach_experience')->where(['user_id'=>$id])->first();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //收费列表
+    public function chargeproject(){
+        $data = DB::table('stu_charge_project')->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //收费详情
+    public function chargestardard(request $request){
+        $id = $request->get('id');
+        $map['id'] = $id;
+        $data = DB::table('stu_standard')->where($map)->first();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    
+
+
+
+    
 
 }

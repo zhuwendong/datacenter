@@ -36,7 +36,7 @@
     <div class='title-box'>
         <span class='icon-student'></span>
         <span>教职工人数：</span>
-        <span>5000</span>
+        <span>{{$count}}</span>
     </div>
     <div style='margin:15px 0;' class='select-box'>
         <!-- <select class='ipt ipt-xs' name="" id="">

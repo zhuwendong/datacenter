@@ -260,9 +260,18 @@ class IndexController extends Controller
         ])->count();
         return view('stubase5',['count'=>$count]);
     }
-    public function teacherbase(){
-        
-        return view('teacherbase');
+    public function teacherbase(Request $request){
+        $campus = $request->get('campus');
+        $orgniza = $request->get('orgniza');
+        if(!empty($campus)){
+            $map['cp_id'] = $campus;
+        }
+        if(!empty($orgniza)){
+            $map['og_id'] = $orgniza;
+        }
+        $map['rs_id'] = 2;
+        $count = DB::table('admin')->where($map)->count();
+        return view('teacherbase',['count'=>$count]);
     }
     public function teacherbase1(){
         return view('teacherbase1');
