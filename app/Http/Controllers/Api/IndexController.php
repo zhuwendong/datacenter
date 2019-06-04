@@ -136,10 +136,89 @@ class IndexController extends Controller
         $data = DB::table('stu_standard')->where($map)->first();
         return $this->_return(['status'=>200,'data'=>$data]);
     }
+    
+    //缴费列表
+    public function chargefee(Request $request){
+        $map = [];
+        $data = DB::table('stu_charge_fee')->where($map)->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //收费详情
+    public function chargedetail(request $request){
+        $id = $request->get('id');
+        $map['id'] = $id;
+        $data = DB::table('stu_charge_fee')->where($map)->first();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+    
 
     
 
+    //教职工信息
+    public function jzginfo(Request $request){
+        $id = $request->get('id');
+        $map['user_id'] = $id;
+        $data = DB::table('jzg_user_info')->where($map)->first();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
 
+    //姓名查询接口
+    public function stusearch(Request $request){
+        $map = [];
+        $ad_sname = $request->get('ad_sname');
+        if(isset($ad_sname) && !empty($ad_sname)){
+            $map['ad_sname'] = $ad_sname;
+        }
+        $data = DB::table('admin')->where($map)->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //通知
+    public function noticelist(Request $request){
+        $map = [];
+        $data = DB::table('notice')->where($map)->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //通知发布
+    public function noticeadd(Request $request){
+        $map = [];
+        $data['nc_title'] = $request->get('nc_title');
+        $data['nc_info'] = $request->get('nc_info');
+        $res = DB::table('notice')->insert($data);
+        if($res){
+            return $this->_return(['status'=>200,'data'=>'新增成功']);
+        }else{
+            return $this->_return(['status'=>200,'data'=>'新增失败']);
+        }
+        
+    }
+
+    //成绩查询接口
+    public function cjlist(){
+        $map = [];
+        $data = DB::table('score')->where($map)->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //添加学生
+    public function stuadd(Request $request){
+        $data = $request->input();
+        $res = DB::table('admin')->insert($data);
+        if($res){
+            return $this->_return(['status'=>200,'data'=>'新增成功']);
+        }else{
+            return $this->_return(['status'=>200,'data'=>'新增失败']);
+        }
+    }
+
+    //体质查询接口
+    public function qualitylist(){
+        $map = [];
+        $data = DB::table('sxd_quality')->where($map)->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
 
     
 

@@ -30,4 +30,13 @@ Route::group(['namespace' => 'Api'], function(){
     Route::any('teachdetail','IndexController@teachdetail');
     Route::any('chargeproject','IndexController@chargeproject');
     Route::any('chargestardard','IndexController@chargestardard');
+    Route::any('chargefee','IndexController@chargefee');
+    Route::any('chargedetail','IndexController@chargedetail');
+    Route::any('jzginfo','IndexController@jzginfo');
+    Route::any('noticelist','IndexController@noticelist');
+    Route::any('stusearch','IndexController@stusearch');
+    Route::any('noticeadd','IndexController@noticeadd');
+    Route::any('cjlist','IndexController@cjlist');
+    Route::any('stuadd','IndexController@stuadd');
+    Route::any('qualitylist','IndexController@qualitylist');
 });  //路由路径Controllers/Api/IndexController/index
