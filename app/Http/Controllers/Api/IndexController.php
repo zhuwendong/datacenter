@@ -112,7 +112,7 @@ class IndexController extends Controller
     //根据学科获取教师
     public function getTeacherBysub(request $request){
         $subject = $request->get('sub_name');
-        $data = DB::table('jzg_subject_teacher')->where(['sub_name'=>$subject])->get();
+        $data = DB::table('pk_coursedetail')->where(['coursedetail'=>$subject])->get();
         return $this->_return(['status'=>200,'data'=>$data]); 
     }
 

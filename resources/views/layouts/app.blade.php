@@ -61,7 +61,7 @@
 	                <span class='icon-menu'></span>
 	                <ul class='menu-child-list hide'>
                         @foreach($sonList as $k=>$v)
-                            <li><span class="item-icon" style="background: url(/icon/{{$v['icon']}}) no-repeat center;"></span><a href="{{$v['sd_url']}}">{{$v['sd_name']}}</a></li>
+						<a href="{{$v['sd_url']}}"><li><span class="item-icon" style="background: url(/icon/{{$v['icon']}}) no-repeat center;"></span>{{$v['sd_name']}}</li></a>
                         @endforeach
                     </ul>
 	            </div>
@@ -85,27 +85,27 @@
 	                        <span class='btn-item icon-skin'></span>
 	                        <a href="{{config('api.sso.ssoLogout')}}"><span id='login_out'  class='btn-item icon-close t'></span></a>
 						    <div class='change-skin-box hide'>
-							<div sk="1" style='background-color:#1c2127;' class='change-skin-item' type="black">
-								<!--<span class='icon-hook'></span>-->
-								<span>商务黑</span>
+								<div sk="1" style='background-color:#1c2127;' class='change-skin-item' type="black">
+									<!--<span class='icon-hook'></span>-->
+									<span>商务黑</span>
+								</div>
+								<div sk="2" style='background-color:#d9181b;' class='change-skin-item' type="red">
+									<!--<span class='icon-hook'></span>-->
+									<span>中国红</span>
+								</div>
+								<div sk="3" style='background-color:#01a165;'  class='change-skin-item' type="green">
+									<!--<span class='icon-hook'></span>-->
+									<span>圣诞绿</span>
+								</div>
+								<div sk="4" style='background-color:#0b9ade;'  class='change-skin-item' type="blue">
+									<!--<span class='icon-hook'></span>-->
+									<span>科技蓝</span>
+								</div>
+								<div sk="5" style='background-color:#e45394;'  class='change-skin-item' type="pink">
+									<!--<span class='icon-hook'></span>-->
+									<span>花瓣粉</span>
+								</div>
 							</div>
-							<div sk="2" style='background-color:#d9181b;' class='change-skin-item' type="red">
-								<!--<span class='icon-hook'></span>-->
-								<span>中国红</span>
-							</div>
-							<div sk="3" style='background-color:#01a165;'  class='change-skin-item' type="green">
-								<!--<span class='icon-hook'></span>-->
-								<span>圣诞绿</span>
-							</div>
-							<div sk="4" style='background-color:#0b9ade;'  class='change-skin-item' type="blue">
-								<!--<span class='icon-hook'></span>-->
-								<span>科技蓝</span>
-							</div>
-							<div sk="5" style='background-color:#e45394;'  class='change-skin-item' type="pink">
-								<!--<span class='icon-hook'></span>-->
-								<span>花瓣粉</span>
-							</div>
-						</div>
 						</div>
 	                </div>
 	            </div>
