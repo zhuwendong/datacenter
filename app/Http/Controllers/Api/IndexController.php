@@ -112,7 +112,17 @@ class IndexController extends Controller
     //根据学科获取教师
     public function getTeacherBysub(request $request){
         $subject = $request->get('sub_name');
-        $data = DB::table('pk_coursedetail')->where(['coursedetail'=>$subject])->get();
+        $data = DB::table('pk_coursedetail')->where(['coursedetail'=>$subject])->groupBy('stuid')->get();
+        foreach($data as &$value){
+            $uid = DB::table('admin')->where(['ad_num'=>$value->stuid])->value('ad_uid');
+            $attach_id = DB::table('jzg_user_info')->where(['user_id'=>$uid])->value('attach_id');
+            $path = DB::table('jzg_attachment')->where(['attach_id'=>$attach_id])->value('url');
+            if(isset($path)){
+                $value->path = 'http://47.96.171.165:8007'.$path;
+            }else{
+                $value->path = '';
+            }
+        }
         return $this->_return(['status'=>200,'data'=>$data]); 
     }
 
