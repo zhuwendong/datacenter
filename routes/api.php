@@ -39,4 +39,7 @@ Route::group(['namespace' => 'Api'], function(){
     Route::any('cjlist','IndexController@cjlist');
     Route::any('stuadd','IndexController@stuadd');
     Route::any('qualitylist','IndexController@qualitylist');
+    Route::any('feelist','IndexController@feelist');
+    Route::any('year','IndexController@year');
+    Route::any('getsemester','IndexController@getsemester');
 });  //路由路径Controllers/Api/IndexController/index

@@ -128,8 +128,18 @@ class IndexController extends Controller
 
     //教师详情
     public function teachdetail(request $request){
-        $id = $request->get('id');
-        $data = DB::table('jzg_teach_experience')->where(['user_id'=>$id])->first();
+        $uid = $request->get('id');
+        $data = [];
+        $data = DB::table('admin')->where(['ad_uid'=>$uid])->first();
+        $attach_id = DB::table('jzg_user_info')->where(['user_id'=>$uid])->value('attach_id');
+        $path = DB::table('jzg_attachment')->where(['attach_id'=>$attach_id])->value('url');
+        if(isset($path)){
+            $data->path = 'http://47.96.171.165:8007'.$path;
+        }else{
+            $data->path = '';
+        }
+        $data3 = DB::table('jzg_teach_experience')->where(['user_id'=>$uid])->first();
+        $data->experience = $data3->experience;
         return $this->_return(['status'=>200,'data'=>$data]);
     }
 
@@ -227,6 +237,35 @@ class IndexController extends Controller
     public function qualitylist(){
         $map = [];
         $data = DB::table('sxd_quality')->where($map)->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+
+    //获取学年
+    public function year(){
+        $data = DB::table('syear')->get();
+        return $this->_return(['status'=>200,'data'=>$data]);
+    }
+
+    //根据学年选择学期
+    public function getsemester(Request $request){
+        $year = $request->get('year');
+        $data = DB::table('semester')->where(['sy_id'=>$year])->get();
+        return $this->_return(['code'=>200,'data'=>$data]);
+    }
+
+    //收费列表
+    public function feelist(Request $request){
+        $year = $request->get('year');
+        $term = $request->get('term');
+        $map = [];
+        if(isset($year) && !empty($year)){
+            $map['year_id'] = $year;
+        }
+        if(isset($term) && !empty($term)){
+            $map['term_id'] = $term;
+        }
+        $data = DB::table('stu_standard')->where($map)->get();
         return $this->_return(['status'=>200,'data'=>$data]);
     }
 
